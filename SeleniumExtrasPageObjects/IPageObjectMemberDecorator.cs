@@ -9,13 +9,12 @@ namespace SeleniumExtras.PageObjects
     public interface IPageObjectMemberDecorator
     {
         /// <summary>
-        /// Locates an element or list of elements for a Page Object member, and returns a
-        /// proxy object for the element or list of elements.
+        /// Locates an element or list of elements for a Page Object member.
         /// </summary>
         /// <param name="member">The <see cref="MemberInfo"/> containing information about
         /// a class's member.</param>
         /// <param name="locator">The <see cref="IElementLocator"/> used to locate elements.</param>
-        /// <returns>A transparent proxy to the WebDriver element object.</returns>
+        /// <returns>The Page Object's member value</returns>
         object Decorate(MemberInfo member, IElementLocator locator);
     }
 }

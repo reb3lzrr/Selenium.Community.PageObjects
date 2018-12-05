@@ -26,7 +26,6 @@ namespace SeleniumExtras.PageObjects
 
         }
 
-
         public PageObjectFactory(IElementActivator elementActivator, IElementLocator elementLocator, DefaultWait<IWebDriver> webDriverWait)
         {
             _elementActivator = elementActivator ?? throw new ArgumentException("Argument can not be null", nameof(elementActivator));
@@ -34,7 +33,11 @@ namespace SeleniumExtras.PageObjects
             _webDriverWait = webDriverWait;
         }
 
-
+        /// <summary>
+        /// Populates the members decorated with the <see cref="FindsByAttribute"/>
+        /// of the <param name="page">pageObject</param>.
+        /// </summary>
+        /// <param name="page">The pageObject</param>
         public void InitElements(object page)
         {
             InitElements(page, _elementLocator, new ProxyPageObjectMemberDecorator(_elementActivator, this, _webDriverWait));

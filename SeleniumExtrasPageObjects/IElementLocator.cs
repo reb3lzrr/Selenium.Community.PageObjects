@@ -5,7 +5,7 @@ using OpenQA.Selenium;
 namespace SeleniumExtras.PageObjects
 {
     /// <summary>
-    /// Interface describing how elements are to be located by a <see cref="PageFactory"/>.
+    /// Interface describing how elements are to be located by a <see cref="PageObjectFactory"/>.
     /// </summary>
     /// <remarks>
     /// A locator must always contain a way to retrieve the <see cref="ISearchContext"/> to
@@ -27,10 +27,10 @@ namespace SeleniumExtras.PageObjects
         IWebElement LocateElement(IEnumerable<By> bys);
 
         /// <summary>
-        /// Locates a list of elements using the given list of <see cref="By"/> criteria.
+        /// Locates a collection of elements using the given list of <see cref="By"/> criteria.
         /// </summary>
-        /// <param name="bys">The list of methods by which to search for the elements.</param>
-        /// <returns>A list of all elements which match the desired criteria.</returns>
+        /// <param name="bys">The different methods by which to search for the elements.</param>
+        /// <returns>A collection of all elements which match the desired criteria.</returns>
         ReadOnlyCollection<IWebElement> LocateElements(IEnumerable<By> bys);
     }
 }

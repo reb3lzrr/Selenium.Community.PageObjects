@@ -7,10 +7,10 @@ using OpenQA.Selenium;
 namespace SeleniumExtras.PageObjects
 {
     /// <summary>
-    /// A default locator for elements for use with the <see cref="PageFactory"/>. This locator
+    /// A default locator for elements for use with the <see cref="PageObjectFactory"/>. This locator
     /// implements no retry logic for elements not being found, nor for elements being stale.
     /// </summary>
-    public class DefaultElementLocator : IElementLocator
+    internal class DefaultElementLocator : IElementLocator
     {
 
         /// <summary>

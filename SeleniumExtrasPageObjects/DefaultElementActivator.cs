@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
 
 namespace SeleniumExtras.PageObjects
 {
+    /// <summary>
+    /// A default activator for use with the <see cref="PageObjectFactory"/>. This implementation 
+    /// </summary>
     public class DefaultElementActivator : IElementActivator
     {
         public object Create(Type type, params object[] parameters)
         {
-
             var ctors = type.GetConstructors();
             var ctorInfo = ctors
                 .Select(x =>
@@ -22,26 +23,24 @@ namespace SeleniumExtras.PageObjects
                         matchedParameters = ctorParams
                             .Select(y =>
                             {
-                                //var constructorParameterType = y.ParameterType
-
                                 return parameters
                                     .FirstOrDefault(z => z.GetType() == y.ParameterType || z.GetType().GetInterfaces().Intersect(y.ParameterType.GetInterfaces()).Any());
-
-                        
                             })
                             .Where(y => y != null)
                             .ToArray()
                     };
                 })
                 .Where(x => x.matchedParameters.Length == x.constructorParameters.Length)
-                .OrderByDescending(x => x.matchedParameters.Count());
+                .OrderByDescending(x => x.matchedParameters.Length)
+                .FirstOrDefault();
 
+            if (ctorInfo == null)
+            {
+                throw new Exception($"Unable to find a matching constructor on type {type} with provided parameters {string.Join(", ", parameters.Select(x => x.GetType().ToString()))}");
+            }
 
-                
-
-            return ctorInfo.First().constructor.Invoke(ctorInfo.First().matchedParameters);
+            return ctorInfo.constructor.Invoke(ctorInfo.matchedParameters);
         }
-
 
         public T Create<T>(params object[] parameters)
         {
