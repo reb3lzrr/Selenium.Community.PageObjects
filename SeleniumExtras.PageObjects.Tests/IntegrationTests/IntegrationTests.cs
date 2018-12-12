@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Autofac;
 using FluentAssertions;
 using OpenQA.Selenium;
@@ -36,6 +37,20 @@ namespace SeleniumExtras.PageObjects.Tests
             }
         }
 
+
+        [Fact]
+        public void FindsMultipleItems_InOrder()
+        {
+            using (var container = Container.Build())
+            {
+                var testPageObject = container.Resolve<TestPageObject>();
+
+                testPageObject.Open();
+                testPageObject.MostPopularProducts.Skip(0).First().Number.Text.Should().Be("1");
+                testPageObject.MostPopularProducts.Skip(1).First().Number.Text.Should().Be("2");
+            }
+        }
+
         [Fact]
         public void FindsMultipleItems_InRealTime()
         {
@@ -51,7 +66,6 @@ namespace SeleniumExtras.PageObjects.Tests
             }
         }
     }
-
 
     public static class Extensions
     {

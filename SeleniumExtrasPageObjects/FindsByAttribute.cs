@@ -10,7 +10,7 @@ namespace SeleniumExtras.PageObjects
     /// </summary>
     /// <remarks>
     /// <para>
-    /// You can use this attribute by specifying the <see cref="How"/> and <see cref="Using"/> properties
+    /// You can use this attribute by specifying the <see cref="_how"/> and <see cref="_uising"/> properties
     /// to indicate how to find the elements. This attribute can be used to decorate fields and properties
     /// in your Page Object classes. The <see cref="Type"/> of the field or property must be either
     /// <see cref="IWebElement"/> or IList{IWebElement}. Any other type will throw an
@@ -40,19 +40,11 @@ namespace SeleniumExtras.PageObjects
     /// </para>
     /// </remarks>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
-    public sealed class FindsByAttribute : ByAttribute, IComparable
+    public sealed class FindsByAttribute : ByAttribute
     {
         private By _finder;
-
-        /// <summary>
-        /// Gets or sets the method used to look up the element
-        /// </summary>
-        internal How How { get; set; }
-
-        /// <summary>
-        /// Gets or sets the value to lookup by (i.e. for How.Name, the actual name to look up)
-        /// </summary>
-        internal string Using { get; set; }
+        private readonly How _how;
+        private readonly string _uising;
 
         /// <summary>
         /// Creates a new instance of the FindsByAttribute, allowing to 
@@ -61,144 +53,43 @@ namespace SeleniumExtras.PageObjects
         /// <param name="using"></param>
         public FindsByAttribute(How how, string @using)
         {
-            How = how;
-            Using = @using;
+            _how = how;
+            _uising = @using;
         }
 
         /// <inheritdoc cref="ByAttributeAttribute.ByFinder"/>
         public override By ByFinder()
         {
-            if (_finder == null)
-            {
-                _finder = From(this);
-            }
-
-            return _finder;
+            return _finder = _finder ?? From(this);
         }
-
 
         public By From(FindsByAttribute attribute)
         {
-            switch (How)
+            switch (_how)
             {
                 case How.Id:
-                    return By.Id(Using);
+                    return By.Id(_uising);
                 case How.Name:
-                    return By.Name(Using);
+                    return By.Name(_uising);
                 case How.TagName:
-                    return By.TagName(Using);
+                    return By.TagName(_uising);
                 case How.ClassName:
-                    return By.ClassName(Using);
+                    return By.ClassName(_uising);
                 case How.CssSelector:
-                    return By.CssSelector(Using);
+                    return By.CssSelector(_uising);
                 case How.LinkText:
-                    return By.LinkText(Using);
+                    return By.LinkText(_uising);
                 case How.PartialLinkText:
-                    return By.PartialLinkText(Using);
+                    return By.PartialLinkText(_uising);
                 case How.XPath:
-                    return By.XPath(Using);
+                    return By.XPath(_uising);
                 default:
-                    throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Did not know how to construct How from how {0}, using {1}", How, Using));
+                    throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Did not know how to construct How from how {0}, using {1}", _how, _uising));
             }
         }
 
 
-        /// <summary>
-        /// Determines if two <see cref="FindsByAttribute"/> instances are equal.
-        /// </summary>
-        /// <param name="one">One instance to compare.</param>
-        /// <param name="two">The other instance to compare.</param>
-        /// <returns><see langword="true"/> if the two instances are equal; otherwise, <see langword="false"/>.</returns>
-        public static bool operator ==(FindsByAttribute one, FindsByAttribute two)
-        {
-            // If both are null, or both are same instance, return true.
-            if (ReferenceEquals(one, two))
-            {
-                return true;
-            }
-
-            // If one is null, but not both, return false.
-            if (((object)one == null) || ((object)two == null))
-            {
-                return false;
-            }
-
-            return one.Equals(two);
-        }
-
-        /// <summary>
-        /// Determines if two <see cref="FindsByAttribute"/> instances are unequal.
-        /// </summary>s
-        /// <param name="one">One instance to compare.</param>
-        /// <param name="two">The other instance to compare.</param>
-        /// <returns><see langword="true"/> if the two instances are not equal; otherwise, <see langword="false"/>.</returns>
-        public static bool operator !=(FindsByAttribute one, FindsByAttribute two)
-        {
-            return !(one == two);
-        }
-
-        /// <summary>
-        /// Determines if one <see cref="FindsByAttribute"/> instance is greater than another.
-        /// </summary>
-        /// <param name="one">One instance to compare.</param>
-        /// <param name="two">The other instance to compare.</param>
-        /// <returns><see langword="true"/> if the first instance is greater than the second; otherwise, <see langword="false"/>.</returns>
-        public static bool operator >(FindsByAttribute one, FindsByAttribute two)
-        {
-            if (one == null)
-            {
-                throw new ArgumentNullException(nameof(one), "Object to compare cannot be null");
-            }
-
-            return one.CompareTo(two) > 0;
-        }
-
-        /// <summary>
-        /// Determines if one <see cref="FindsByAttribute"/> instance is less than another.
-        /// </summary>
-        /// <param name="one">One instance to compare.</param>
-        /// <param name="two">The other instance to compare.</param>
-        /// <returns><see langword="true"/> if the first instance is less than the second; otherwise, <see langword="false"/>.</returns>
-        public static bool operator <(FindsByAttribute one, FindsByAttribute two)
-        {
-            if (one == null)
-            {
-                throw new ArgumentNullException(nameof(one), "Object to compare cannot be null");
-            }
-
-            return one.CompareTo(two) < 0;
-        }
-
-        /// <summary>
-        /// Compares the current instance with another object of the same type and returns an
-        /// integer that indicates whether the current instance precedes, follows, or occurs
-        /// in the same position in the sort order as the other object.
-        /// </summary>
-        /// <param name="obj">An object to compare with this instance.</param>
-        /// <returns>A value that indicates the relative order of the objects being compared. The return value has these meanings:
-        /// <list type="table">
-        /// <listheader>Value</listheader><listheader>Meaning</listheader>
-        /// <item><description>Less than zero</description><description>This instance precedes <paramref name="obj"/> in the sort order.</description></item>
-        /// <item><description>Zero</description><description>This instance occurs in the same position in the sort order as <paramref name="obj"/>.</description></item>
-        /// <item><description>Greater than zero</description><description>This instance follows <paramref name="obj"/> in the sort order. </description></item>
-        /// </list>
-        /// </returns>
-        public int CompareTo(object obj)
-        {
-            if (obj == null)
-            {
-                throw new ArgumentNullException(nameof(obj), "Object to compare cannot be null");
-            }
-
-            var other = obj as FindsByAttribute;
-            if (other == null)
-            {
-                throw new ArgumentException("Object to compare must be a FindsByAttribute", nameof(obj));
-            }
-
-            return 0;
-        }
-
+       
         /// <summary>
         /// Determines whether the specified <see cref="object">Object</see> is equal
         /// to the current <see cref="object">Object</see>.
