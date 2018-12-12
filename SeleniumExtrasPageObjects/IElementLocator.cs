@@ -15,11 +15,6 @@ namespace SeleniumExtras.PageObjects
     public interface IElementLocator
     {
         /// <summary>
-        /// Gets the <see cref="ISearchContext"/> to be used in locating elements.
-        /// </summary>
-        ISearchContext SearchContext { get; }
-
-        /// <summary>
         /// Locates an element using the given list of <see cref="By"/> criteria.
         /// </summary>
         /// <param name="bys">The list of methods by which to search for the element.</param>

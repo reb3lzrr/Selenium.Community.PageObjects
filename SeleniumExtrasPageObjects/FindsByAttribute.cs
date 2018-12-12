@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using OpenQA.Selenium;
 
 namespace SeleniumExtras.PageObjects
@@ -39,7 +40,7 @@ namespace SeleniumExtras.PageObjects
     /// </para>
     /// </remarks>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
-    public sealed class FindsByAttribute : Attribute, IComparable, IFinder
+    public sealed class FindsByAttribute : ByAttribute, IComparable
     {
         private By _finder;
 
@@ -64,16 +65,43 @@ namespace SeleniumExtras.PageObjects
             Using = @using;
         }
 
-        /// <inheritdoc cref="IFinder.Finder"/>
-        public By Finder()
+        /// <inheritdoc cref="ByAttributeAttribute.ByFinder"/>
+        public override By ByFinder()
         {
             if (_finder == null)
             {
-                _finder = ByFactory.From(this);
+                _finder = From(this);
             }
 
             return _finder;
         }
+
+
+        public By From(FindsByAttribute attribute)
+        {
+            switch (How)
+            {
+                case How.Id:
+                    return By.Id(Using);
+                case How.Name:
+                    return By.Name(Using);
+                case How.TagName:
+                    return By.TagName(Using);
+                case How.ClassName:
+                    return By.ClassName(Using);
+                case How.CssSelector:
+                    return By.CssSelector(Using);
+                case How.LinkText:
+                    return By.LinkText(Using);
+                case How.PartialLinkText:
+                    return By.PartialLinkText(Using);
+                case How.XPath:
+                    return By.XPath(Using);
+                default:
+                    throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Did not know how to construct How from how {0}, using {1}", How, Using));
+            }
+        }
+
 
         /// <summary>
         /// Determines if two <see cref="FindsByAttribute"/> instances are equal.
@@ -193,7 +221,7 @@ namespace SeleniumExtras.PageObjects
                 return false;
             }
 
-            if (other.Finder() != Finder())
+            if (other.ByFinder() != ByFinder())
             {
                 return false;
             }
@@ -207,7 +235,7 @@ namespace SeleniumExtras.PageObjects
         /// <returns>A hash code for the current <see cref="object">Object</see>.</returns>
         public override int GetHashCode()
         {
-            return Finder().GetHashCode();
+            return ByFinder().GetHashCode();
         }
     }
 }

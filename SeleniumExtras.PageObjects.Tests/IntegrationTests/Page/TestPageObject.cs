@@ -32,7 +32,7 @@ namespace SeleniumExtras.PageObjects.Tests.Page
         public IWebElement PopularSearchesTitle { get; set; }
 
         [FindsBy(How.CssSelector, "div.greyTopBorderBlock.popularsearches a")]
-        public IEnumerable<IWebElement>  PopularSearches { get; set; }
+        public IEnumerable<IWebElement> PopularSearches { get; set; }
 
         public class ProductPageObject : IWrapsElement
         {

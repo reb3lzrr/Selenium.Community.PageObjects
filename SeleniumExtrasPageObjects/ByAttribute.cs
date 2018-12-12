@@ -1,12 +1,13 @@
 ﻿using OpenQA.Selenium;
+using System;
 
 namespace SeleniumExtras.PageObjects
 {
-    public interface IFinder
+    public abstract class ByAttribute : Attribute
     {
         /// <summary>
         /// Gets an explicit <see cref="By"/> object to find by.
         /// </summary>
-        By Finder();
+        public abstract By ByFinder();
     }
 }

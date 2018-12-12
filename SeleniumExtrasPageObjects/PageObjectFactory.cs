@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
@@ -7,30 +8,26 @@ using OpenQA.Selenium.Support.UI;
 namespace SeleniumExtras.PageObjects
 {
     /// <summary>
-    /// Provides the ability to produce Page Objects modeling a page. This class cannot be inherited.
+    /// Provides the ability to produce Page Objects modeling a page
     /// </summary>
     public class PageObjectFactory
     {
         private readonly IElementLocator _elementLocator;
-        private readonly IElementActivator _elementActivator;
-        private readonly DefaultWait<IWebDriver> _webDriverWait;
+        private readonly IPageObjectMemberDecorator _pageObjectMemberDecorator;
 
         private const BindingFlags PublicBindingOptions = BindingFlags.Instance | BindingFlags.Public;
         private const BindingFlags NonPublicBindingOptions = BindingFlags.Instance | BindingFlags.NonPublic;
 
-        public PageObjectFactory(IWebDriver driver) :
-            this(new DefaultElementActivator(), 
-                new DefaultElementLocator(driver), 
-                new WebDriverWait(driver, TimeSpan.FromSeconds(10)))
+        public PageObjectFactory(IWebDriver driver)
         {
-
+            _elementLocator = new DefaultElementLocator(driver);
+            _pageObjectMemberDecorator = new ProxyPageObjectMemberDecorator(new DefaultElementActivator(), this, new WebDriverWait(driver, TimeSpan.FromSeconds(10)));
         }
 
-        public PageObjectFactory(IElementActivator elementActivator, IElementLocator elementLocator, DefaultWait<IWebDriver> webDriverWait)
+        public PageObjectFactory(IElementLocator elementLocator, IPageObjectMemberDecorator pageObjectMemberDecorator)
         {
-            _elementActivator = elementActivator ?? throw new ArgumentException("Argument can not be null", nameof(elementActivator));
             _elementLocator = elementLocator ?? throw new ArgumentException("Argument can not be null", nameof(elementLocator));
-            _webDriverWait = webDriverWait;
+            _pageObjectMemberDecorator = pageObjectMemberDecorator;
         }
 
         /// <summary>
@@ -40,10 +37,10 @@ namespace SeleniumExtras.PageObjects
         /// <param name="page">The pageObject</param>
         public void InitElements(object page)
         {
-            InitElements(page, _elementLocator, new ProxyPageObjectMemberDecorator(_elementActivator, this, _webDriverWait));
+            InitElements(page, _elementLocator);
         }
 
-        internal void InitElements(object page, IElementLocator locator, IPageObjectMemberDecorator decorator)
+        internal void InitElements(object page, IElementLocator locator)
         {
             if (page == null)
             {
@@ -55,18 +52,44 @@ namespace SeleniumExtras.PageObjects
                 throw new ArgumentNullException(nameof(locator), "locator cannot be null");
             }
 
-            if (decorator == null)
+            foreach (var member in MembersToDecorate(page))
             {
-                throw new ArgumentNullException(nameof(locator), "decorator cannot be null");
-            }
+                var bys = member.GetCustomAttributes()
+                    .Where(x => typeof(ByAttribute).IsAssignableFrom(x.GetType()))
+                    .Select(x => (x as ByAttribute).ByFinder())
+                    .ToArray();
 
-            if (locator.SearchContext == null)
-            {
-                throw new ArgumentException("The SearchContext of the locator object cannot be null", nameof(locator));
-            }
+                if (bys.Any())
+                {
+                    //Check if member can be written to
+                    if (!CanWriteToMember(member, out var typeToDecorate))
+                    {
+                        throw new MemberAccessException($"Can't write to {member.DeclaringType.Name}.{member.Name} whilst decorated with a IFinder");
+                    }
 
-            // Get a list of all of the fields and properties (public and non-public [private, protected, etc.])
-            // in the passed-in page object. Note that we walk the inheritance tree to get superclass members.
+                    //Decorates the member
+                    var decoratedValue = _pageObjectMemberDecorator.Decorate(typeToDecorate, bys, locator);
+                    if (decoratedValue == null)
+                    {
+                        continue;
+                    }
+
+                    var field = member as FieldInfo;
+                    var property = member as PropertyInfo;
+                    if (field != null)
+                    {
+                        field.SetValue(page, decoratedValue);
+                    }
+                    else if (property != null)
+                    {
+                        property.SetValue(page, decoratedValue, null);
+                    }
+                }
+            }
+        }
+
+        private static List<MemberInfo> MembersToDecorate(object page)
+        {
             var type = page.GetType();
             var members = new List<MemberInfo>();
             members.AddRange(type.GetFields(PublicBindingOptions));
@@ -78,26 +101,25 @@ namespace SeleniumExtras.PageObjects
                 type = type.BaseType;
             }
 
-            foreach (var member in members)
-            {
-                //Decorates the member
-                var decoratedValue = decorator.Decorate(member, locator);
-                if (decoratedValue == null)
-                {
-                    continue;
-                }
+            return members;
+        }
 
-                var field = member as FieldInfo;
-                var property = member as PropertyInfo;
-                if (field != null)
-                {
-                    field.SetValue(page, decoratedValue);
-                }
-                else if (property != null)
-                {
-                    property.SetValue(page, decoratedValue, null);
-                }
+        private static bool CanWriteToMember(MemberInfo member, out Type type)
+        {
+            if (member is FieldInfo field)
+            {
+                type = field.FieldType;
+                return true;
             }
+
+            if (member is PropertyInfo property)
+            {
+                type = property.PropertyType;
+                return property.CanWrite;
+            }
+
+            type = null;
+            return false;
         }
     }
 }

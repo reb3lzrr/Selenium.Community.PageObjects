@@ -22,55 +22,48 @@ namespace SeleniumExtras.PageObjects
             _webDriverWaiter = webDriverWaiter;
         }
 
-        public object Decorate(MemberInfo member, IElementLocator locator)
+        public object Decorate(Type typeToDecorate, IEnumerable<By> bys, IElementLocator elementLocator)
         {
-            var bys = member.GetCustomAttributes()
-                .Where(x => typeof(IFinder).IsAssignableFrom(x.GetType()))
-                .Select(x => (x as IFinder).Finder())
-                .ToArray();
-
-            if (bys.Any() && TryCanDecorate(member, out var typeToDecorate))
+            if (typeof(IWebElement).IsAssignableFrom(typeToDecorate))
             {
-                if (typeof(IWebElement).IsAssignableFrom(typeToDecorate))
-                {
-                    return DecorateWebElement(locator, bys);
-                }
+                return DecorateWebElement(elementLocator, bys);
+            }
 
-                if (typeof(IWrapsElement).IsAssignableFrom(typeToDecorate))
-                {
-                    return DecorateWrappedWebElement(typeToDecorate, locator, bys);
-                }
+            if (typeof(IWrapsElement).IsAssignableFrom(typeToDecorate))
+            {
+                return DecorateWrappedWebElement(typeToDecorate, elementLocator, bys);
+            }
 
-                if (typeToDecorate.IsGenericType)
-                {
-                    var genericTypeDefinition = typeToDecorate.GetGenericTypeDefinition();
-                    var genericTypeArgument = typeToDecorate.GenericTypeArguments.Single();
+            if (typeToDecorate.IsGenericType)
+            {
+                var genericTypeDefinition = typeToDecorate.GetGenericTypeDefinition();
+                var genericTypeArgument = typeToDecorate.GenericTypeArguments.Single();
 
-                    if (typeof(IEnumerable<>).IsAssignableFrom(genericTypeDefinition))
+                if (typeof(IEnumerable<>).IsAssignableFrom(genericTypeDefinition))
+                {
+                    if (typeof(IWebElement).IsAssignableFrom(genericTypeArgument))
                     {
-                        if (typeof(IWebElement).IsAssignableFrom(genericTypeArgument))
-                        {
-                            return WebElementEnumerableProxy.Create(locator, bys);
-                        }
+                        return WebElementEnumerableProxy.Create(elementLocator, bys);
+                    }
 
-                        if (typeof(IWrapsElement).IsAssignableFrom(genericTypeArgument))
-                        {
-                            var method = typeof(ProxyPageObjectMemberDecorator).GetMethod("DecorateEnumerableWrappedElement", new[] { typeof(IElementLocator), typeof(IEnumerable<By>) });
-                            method = method.MakeGenericMethod(genericTypeArgument);
-                            var element = method.Invoke(this, new object[] { locator, bys });
+                    if (typeof(IWrapsElement).IsAssignableFrom(genericTypeArgument))
+                    {
+                        var method = typeof(ProxyPageObjectMemberDecorator).GetMethod(nameof(ProxyPageObjectMemberDecorator.DecorateEnumerableWrappedElement), new[] { typeof(IElementLocator), typeof(IEnumerable<By>) });
+                        method = method.MakeGenericMethod(genericTypeArgument);
+                        var element = method.Invoke(this, new object[] { elementLocator, bys });
 
-                            return element;
-                        }
+                        return element;
                     }
                 }
             }
 
-            return null;
+            //TODO: find or make exception
+            throw new Exception($"Can't decorate {typeToDecorate}");
         }
 
-        public IEnumerable<T> DecorateEnumerableWrappedElement<T>(IElementLocator locator, IEnumerable<By> bys)
+        public IEnumerable<T> DecorateEnumerableWrappedElement<T>(IElementLocator elementLocator, IEnumerable<By> bys)
         {
-            return WebElementEnumerableProxy.Create(locator, bys)
+            return WebElementEnumerableProxy.Create(elementLocator, bys)
                 .Select(webElement =>
                 {
                     var wrappedElement = _elementActivator.Create<T>(webElement);
@@ -85,21 +78,21 @@ namespace SeleniumExtras.PageObjects
 
                     wrappedElementProperty.SetValue(wrappedElement, webElement);
 
-                    _factory.InitElements(wrappedElement, new DefaultElementLocator(webElement), this);
+                    _factory.InitElements(wrappedElement, new DefaultElementLocator(webElement));
 
                     return wrappedElement;
                 });
         }
 
 
-        private object DecorateWebElement(IElementLocator locator, IEnumerable<By> bys)
+        private object DecorateWebElement(IElementLocator elementLocator, IEnumerable<By> bys)
         {
-            return WebElementProxy.Create(locator, bys, _webDriverWaiter);
+            return WebElementProxy.Create(elementLocator, bys, _webDriverWaiter);
         }
 
-        private object DecorateWrappedWebElement(Type typeToDecorate, IElementLocator locator, IEnumerable<By> bys)
+        private object DecorateWrappedWebElement(Type typeToDecorate, IElementLocator elementLocator, IEnumerable<By> bys)
         {
-            var element = WebElementProxy.Create(locator, bys, _webDriverWaiter);
+            var element = WebElementProxy.Create(elementLocator, bys, _webDriverWaiter);
 
             var wrappedElement = _elementActivator.Create(typeToDecorate, element);
             var wrappedElementProperty = wrappedElement.GetType()
@@ -114,28 +107,9 @@ namespace SeleniumExtras.PageObjects
 
             wrappedElementProperty.SetValue(wrappedElement, element);
 
-            _factory.InitElements(wrappedElement, new DefaultElementLocator(element), this);
+            _factory.InitElements(wrappedElement, new DefaultElementLocator(element));
 
             return wrappedElement;
-        }
-
-        public bool TryCanDecorate(MemberInfo member, out Type type)
-        {
-            if (member is FieldInfo field)
-            {
-                type = field.FieldType;
-                return true;
-            }
-
-
-            if (member is PropertyInfo property)
-            {
-                type = property.PropertyType;
-                return property.CanWrite;
-            }
-
-            type = null;
-            return false;
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using OpenQA.Selenium;
+using System;
+using System.Collections.Generic;
 
 namespace SeleniumExtras.PageObjects
 {
@@ -11,10 +13,10 @@ namespace SeleniumExtras.PageObjects
         /// <summary>
         /// Locates an element or list of elements for a Page Object member.
         /// </summary>
-        /// <param name="member">The <see cref="MemberInfo"/> containing information about
-        /// a class's member.</param>
-        /// <param name="locator">The <see cref="IElementLocator"/> used to locate elements.</param>
+        /// <param name="typeToDecorate">The <see cref="Type"/> of the member to decorate</param>
+        /// <param name="bys">The <see cref="By"> bys</see> provided to decorate the member with</param>
+        /// <param name="elementLocator">The <see cref="IElementLocator"/> elementLocator to locate elements.</param>
         /// <returns>The Page Object's member value</returns>
-        object Decorate(MemberInfo member, IElementLocator locator);
+        object Decorate(Type typeToDecorate, IEnumerable<By> bys, IElementLocator elementLocator);
     }
 }
