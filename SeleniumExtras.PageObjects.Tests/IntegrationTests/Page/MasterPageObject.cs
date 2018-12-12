@@ -19,7 +19,8 @@ namespace SeleniumExtras.PageObjects.Tests.Page
 
         public void Open()
         {
-            _webDriver.Url = new Uri(Path.Combine(Path.GetDirectoryName(GetType().Assembly.Location), "Page/test.html")).AbsoluteUri;
+            _webDriver.Url = new Uri(Path.Combine(Path.GetDirectoryName(GetType().Assembly.Location), "IntegrationTests/Page/test.html")).AbsoluteUri;
+            _webDriver.Navigate().Refresh();
             _pageObjectFactory.InitElements(this);
         }
 

@@ -46,6 +46,5 @@ namespace SeleniumExtras.PageObjects
         {
             return (T)Create(typeof(T), parameters);
         }
-
     }
 }

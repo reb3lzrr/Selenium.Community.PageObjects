@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using OpenQA.Selenium;
 
 namespace SeleniumExtras.PageObjects
@@ -27,21 +26,20 @@ namespace SeleniumExtras.PageObjects
     /// </para>
     /// <para>
     /// You can also use multiple instances of this attribute to find an element that may meet
-    /// one of multiple criteria. When using multiple instances, you can specify the order in
-    /// which the criteria is matched by using the <see cref="Priority"/> property.
+    /// one of multiple criteria.
     /// </para>
     /// <para>
     /// <code>
     /// // Will find the element with the name attribute matching the first of "anElementName"
     /// // or "differentElementName".
-    /// [FindsBy(How = How.Name, Using = "anElementName", Priority = 0)]
-    /// [FindsBy(How = How.Name, Using = "differentElementName", Priority = 1)]
+    /// [FindsBy(How = How.Name, Using = "anElementName")]
+    /// [FindsBy(How = How.Name, Using = "differentElementName")]
     /// public IWebElement thisElement;
     /// </code>
     /// </para>
     /// </remarks>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
-    public sealed class FindsByAttribute : Attribute, IComparable
+    public sealed class FindsByAttribute : Attribute, IComparable, IFinder
     {
         private By _finder;
 
@@ -56,38 +54,25 @@ namespace SeleniumExtras.PageObjects
         internal string Using { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating where this attribute should be evaluated relative to other instances
-        /// of this attribute decorating the same class member.
+        /// Creates a new instance of the FindsByAttribute, allowing to 
         /// </summary>
-        [DefaultValue(0)]
-        public int Priority { get; set; }
-
+        /// <param name="how"></param>
+        /// <param name="using"></param>
         public FindsByAttribute(How how, string @using)
         {
             How = how;
             Using = @using;
         }
 
-        /// <summary>
-        /// Gets or sets an explicit <see cref="By"/> object to find by.
-        /// Setting this property takes precedence over setting the How or Using properties.
-        /// </summary>
-        internal By Finder
+        /// <inheritdoc cref="IFinder.Finder"/>
+        public By Finder()
         {
-            get
+            if (_finder == null)
             {
-                if (_finder == null)
-                {
-                    _finder = ByFactory.From(this);
-                }
-
-                return _finder;
+                _finder = ByFactory.From(this);
             }
 
-            set
-            {
-                _finder = (By)value;
-            }
+            return _finder;
         }
 
         /// <summary>
@@ -183,12 +168,6 @@ namespace SeleniumExtras.PageObjects
                 throw new ArgumentException("Object to compare must be a FindsByAttribute", nameof(obj));
             }
 
-            // TODO(JimEvans): Construct an algorithm to sort on more than just Priority.
-            if (Priority != other.Priority)
-            {
-                return Priority - other.Priority;
-            }
-
             return 0;
         }
 
@@ -214,12 +193,7 @@ namespace SeleniumExtras.PageObjects
                 return false;
             }
 
-            if (other.Priority != Priority)
-            {
-                return false;
-            }
-
-            if (other.Finder != Finder)
+            if (other.Finder() != Finder())
             {
                 return false;
             }
@@ -233,7 +207,7 @@ namespace SeleniumExtras.PageObjects
         /// <returns>A hash code for the current <see cref="object">Object</see>.</returns>
         public override int GetHashCode()
         {
-            return Finder.GetHashCode();
+            return Finder().GetHashCode();
         }
     }
 }

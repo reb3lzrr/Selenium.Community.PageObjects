@@ -24,12 +24,13 @@ namespace SeleniumExtras.PageObjects
 
         public object Decorate(MemberInfo member, IElementLocator locator)
         {
-            var findsByAttributes = member.GetCustomAttributes<FindsByAttribute>().ToArray();
+            var bys = member.GetCustomAttributes()
+                .Where(x => typeof(IFinder).IsAssignableFrom(x.GetType()))
+                .Select(x => (x as IFinder).Finder())
+                .ToArray();
 
-            if (findsByAttributes.Any() && TryCanDecorate(member, out var typeToDecorate))
+            if (bys.Any() && TryCanDecorate(member, out var typeToDecorate))
             {
-                var bys = findsByAttributes.Select(ByFactory.From);
-
                 if (typeof(IWebElement).IsAssignableFrom(typeToDecorate))
                 {
                     return DecorateWebElement(locator, bys);
@@ -66,7 +67,6 @@ namespace SeleniumExtras.PageObjects
 
             return null;
         }
-
 
         public IEnumerable<T> DecorateEnumerableWrappedElement<T>(IElementLocator locator, IEnumerable<By> bys)
         {
@@ -118,9 +118,6 @@ namespace SeleniumExtras.PageObjects
 
             return wrappedElement;
         }
-
-
-
 
         public bool TryCanDecorate(MemberInfo member, out Type type)
         {
