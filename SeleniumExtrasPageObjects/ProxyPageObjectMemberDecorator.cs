@@ -87,12 +87,12 @@ namespace SeleniumExtras.PageObjects
 
         private object DecorateWebElement(IElementLocator elementLocator, IEnumerable<By> bys)
         {
-            return WebElementProxy.Create(elementLocator, bys, _webDriverWaiter);
+            return WebElementProxy.Create(elementLocator, bys);
         }
 
         private object DecorateWrappedWebElement(Type typeToDecorate, IElementLocator elementLocator, IEnumerable<By> bys)
         {
-            var element = WebElementProxy.Create(elementLocator, bys, _webDriverWaiter);
+            var element = WebElementProxy.Create(elementLocator, bys);
 
             var wrappedElement = _elementActivator.Create(typeToDecorate, element);
             var wrappedElementProperty = wrappedElement.GetType()
