@@ -55,8 +55,8 @@ namespace SeleniumExtras.PageObjects
             foreach (var member in MembersToDecorate(page))
             {
                 var bys = member.GetCustomAttributes()
-                    .Where(x => typeof(ByAttribute).IsAssignableFrom(x.GetType()))
-                    .Select(x => (x as ByAttribute).ByFinder())
+                    .Select(x => (x as ByAttribute)?.ByFinder())
+                    .Where(x => x != null)
                     .ToArray();
 
                 if (bys.Any())

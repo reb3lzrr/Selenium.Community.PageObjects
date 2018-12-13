@@ -4,7 +4,7 @@ using System.IO;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Internal;
 
-namespace SeleniumExtras.PageObjects.Tests.Page
+namespace SeleniumExtras.PageObjects.Tests.IntegrationTests.Page
 {
     public class TestPageObject
     {

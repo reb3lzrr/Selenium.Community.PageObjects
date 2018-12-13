@@ -7,11 +7,6 @@ namespace SeleniumExtras.PageObjects
     /// <summary>
     /// Interface describing how elements are to be located by a <see cref="PageObjectFactory"/>.
     /// </summary>
-    /// <remarks>
-    /// A locator must always contain a way to retrieve the <see cref="ISearchContext"/> to
-    /// use in locating elements. In practice, this will usually be implemented by passing
-    /// the context in via a constructor.
-    /// </remarks>
     public interface IElementLocator
     {
         /// <summary>

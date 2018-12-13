@@ -12,7 +12,6 @@ namespace SeleniumExtras.PageObjects.Proxies
         private IEnumerable<By> _bys;
         private DefaultWait<IWebDriver> _webDriverWaiter;
 
-
         protected override object Invoke(MethodInfo targetMethod, object[] args)
         {
             var exceptions = new List<Exception>();

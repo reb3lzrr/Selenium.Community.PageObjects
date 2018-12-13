@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using Autofac;
 using FluentAssertions;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Support.UI;
-using SeleniumExtras.PageObjects.Tests.Page;
+using SeleniumExtras.PageObjects.Tests.IntegrationTests.Page;
 using Xunit;
 
-namespace SeleniumExtras.PageObjects.Tests
+namespace SeleniumExtras.PageObjects.Tests.IntegrationTests
 {
     public class IntegrationTests
     {
@@ -73,8 +74,10 @@ namespace SeleniumExtras.PageObjects.Tests
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterType<EdgeDriver>()
-                .WithParameter("service", EdgeDriverService.CreateDefaultService("."))
+            builder.RegisterType<ChromeDriver>()
+                .WithParameter("service", ChromeDriverService.CreateDefaultService("."))
+            //builder.RegisterType<EdgeDriver>()
+            //    .WithParameter("service", EdgeDriverService.CreateDefaultService("."))
                 .As<IWebDriver>()
                 .As<IJavaScriptExecutor>()
                 .SingleInstance();
