@@ -1,7 +1,6 @@
 ﻿#if !NETSTANDARD2_0
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using OpenQA.Selenium;
 
 namespace SeleniumExtras.PageObjects
@@ -58,7 +57,7 @@ namespace SeleniumExtras.PageObjects
         /// </summary>
         /// <param name="bys">The list of methods by which to search for the elements.</param>
         /// <returns>A list of all elements which match the desired criteria.</returns>
-        public ReadOnlyCollection<IWebElement> LocateElements(IEnumerable<By> bys)
+        public IReadOnlyCollection<IWebElement> LocateElements(IEnumerable<By> bys)
         {
             if (bys == null)
             {

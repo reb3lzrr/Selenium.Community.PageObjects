@@ -112,16 +112,16 @@ namespace SeleniumExtras.PageObjects.Tests
     public class WhatIsMyPrivateFieldValue
     {
         [FindsBy(How.ClassName, "a")]
-        public readonly int PublicField;
+        public int PublicField;
 
         [FindsBy(How.ClassName, "a")]
-        private int PrivateField;
+        private int PrivateField = -1;
 
         [FindsBy(How.ClassName, "a")]
         protected int ProtectedField;
 
         [FindsBy(How.ClassName, "a")]
-        internal int InternalField;
+        internal int InternalField = -1;
 
         public int PrivateFieldValue()
         {

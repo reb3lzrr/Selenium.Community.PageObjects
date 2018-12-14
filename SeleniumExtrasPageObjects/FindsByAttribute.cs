@@ -57,7 +57,7 @@ namespace SeleniumExtras.PageObjects
             _uising = @using;
         }
 
-        /// <inheritdoc cref="ByAttributeAttribute.ByFinder"/>
+        /// <inheritdoc cref="ByAttribute.ByFinder"/>
         public override By ByFinder()
         {
             return _finder = _finder ?? From(this);
