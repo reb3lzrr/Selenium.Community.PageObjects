@@ -31,5 +31,23 @@ namespace SeleniumExtras.PageObjects.Tests.Proxies
 
             elementLocatorMock.Verify(x => x.LocateElements(bys), Times.Once());
         }
+
+        [Theory]
+        [AutoDomainData]
+        public void DoesntCache(
+            Mock<IWebElement> webElementMock,
+            Mock<IElementLocator> elementLocatorMock,
+            ICollection<By> bys)
+        {
+            elementLocatorMock.Setup(x => x.LocateElements(bys))
+                .Returns(new[] { webElementMock.Object });
+
+            var proxy = WebElementEnumerableProxy.Create(elementLocatorMock.Object, bys);
+
+            proxy.Count();
+            proxy.Count();
+
+            elementLocatorMock.Verify(x => x.LocateElements(bys), Times.Exactly(2));
+        }
     }
 }
