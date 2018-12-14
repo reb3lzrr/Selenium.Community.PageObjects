@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using OpenQA.Selenium;
 
 namespace SeleniumExtras.PageObjects
@@ -21,6 +20,6 @@ namespace SeleniumExtras.PageObjects
         /// </summary>
         /// <param name="bys">The different methods by which to search for the elements.</param>
         /// <returns>A collection of all elements which match the desired criteria.</returns>
-        ReadOnlyCollection<IWebElement> LocateElements(IEnumerable<By> bys);
+        IReadOnlyCollection<IWebElement> LocateElements(IEnumerable<By> bys);
     }
 }
