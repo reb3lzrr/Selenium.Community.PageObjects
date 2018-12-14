@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using FluentAssertions;
 using Moq;
 using OpenQA.Selenium;
 using SeleniumExtras.PageObjects.Proxies;
