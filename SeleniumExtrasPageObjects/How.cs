@@ -44,10 +44,5 @@
         /// Finds by <see cref="OpenQA.Selenium.By.XPath" />
         /// </summary>
         XPath,
-
-        ///// <summary>
-        ///// Finds by a custom <see cref=" OpenQA.Selenium.By"/> implementation.
-        ///// </summary>
-        //Custom
     }
 }

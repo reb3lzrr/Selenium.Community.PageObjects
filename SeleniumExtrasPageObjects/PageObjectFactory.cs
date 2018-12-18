@@ -64,7 +64,7 @@ namespace SeleniumExtras.PageObjects
                     //Check if member can be written to
                     if (!CanWriteToMember(member, out var typeToDecorate))
                     {
-                        throw new MemberAccessException($"Can't write to {member.DeclaringType.Name}.{member.Name} whilst decorated with a IFinder");
+                        throw new MemberAccessException($"Can't write to {member.DeclaringType.Name}.{member.Name} whilst decorated with a {nameof(ByAttribute)}");
                     }
 
                     //Decorates the member
