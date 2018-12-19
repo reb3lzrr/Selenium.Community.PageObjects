@@ -1,7 +1,8 @@
-﻿#if !NETSTANDARD2_0
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace SeleniumExtras.PageObjects
 {
@@ -9,8 +10,9 @@ namespace SeleniumExtras.PageObjects
     /// A default locator for elements for use with the <see cref="PageObjectFactory"/>. This locator
     /// implements no retry logic for elements not being found, nor for elements being stale.
     /// </summary>
-    internal class DefaultElementLocator : IElementLocator
+    public class DefaultElementLocator : IElementLocator
     {
+        private readonly IWait<ISearchContext> _waiter;
         private readonly ISearchContext _searchContext;
 
         /// <summary>
@@ -21,8 +23,12 @@ namespace SeleniumExtras.PageObjects
         public DefaultElementLocator(ISearchContext searchContext)
         {
             _searchContext = searchContext ?? throw new ArgumentException("The SearchContext of the locator object cannot be null", nameof(searchContext));
+            _waiter = new DefaultWait<ISearchContext>(searchContext)
+            {
+                PollingInterval = TimeSpan.FromMilliseconds(50),
+                Timeout = TimeSpan.FromSeconds(10)
+            };
         }
-
 
         /// <summary>
         /// Locates an element using the given list of <see cref="By"/> criteria.
@@ -31,25 +37,19 @@ namespace SeleniumExtras.PageObjects
         /// <returns>An <see cref="IWebElement"/> which is the first match under the desired criteria.</returns>
         public IWebElement LocateElement(IEnumerable<By> bys)
         {
-            if (bys == null)
+            if (bys?.Any() == null)
             {
-                throw new ArgumentNullException(nameof(bys), "List of criteria may not be null");
+                throw new ArgumentNullException(nameof(bys), "List of criteria may not be null or empty");
             }
 
-            string errorString = null;
-            foreach (var by in bys)
+            try
             {
-                try
-                {
-                    return _searchContext.FindElement(by);
-                }
-                catch (NoSuchElementException)
-                {
-                    errorString = (errorString == null ? "Could not find element by: " : errorString + ", or: ") + by;
-                }
+                return _waiter.Until(searchContext => FindElements(bys, searchContext).FirstOrDefault());
             }
-
-            throw new NoSuchElementException(errorString);
+            catch (WebDriverTimeoutException)
+            {
+                throw new NoSuchElementException($"Could not find any elements matching the provided bys: {string.Join(", ", bys)}");
+            }
         }
 
         /// <summary>
@@ -64,15 +64,22 @@ namespace SeleniumExtras.PageObjects
                 throw new ArgumentNullException(nameof(bys), "List of criteria may not be null");
             }
 
-            var collection = new List<IWebElement>();
-            foreach (var by in bys)
-            {
-                var list = _searchContext.FindElements(by);
-                collection.AddRange(list);
-            }
+            return FindElements(bys, _searchContext).ToArray();
+        }
 
-            return collection.AsReadOnly();
+        private IEnumerable<IWebElement> FindElements(IEnumerable<By> bys, ISearchContext searchContext)
+        {
+            return bys.SelectMany(by =>
+            {
+                try
+                {
+                    return searchContext.FindElements(by).AsEnumerable();
+                }
+                catch (NoSuchElementException)
+                {
+                    return new IWebElement[0];
+                }
+            });
         }
     }
 }
-#endif

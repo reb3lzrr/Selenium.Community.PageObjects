@@ -48,7 +48,7 @@ namespace SeleniumExtras.PageObjects
 
                     if (typeof(IWrapsElement).IsAssignableFrom(genericTypeArgument))
                     {
-                        var method = typeof(ProxyPageObjectMemberDecorator).GetMethod(nameof(ProxyPageObjectMemberDecorator.DecorateEnumerableWrappedElement), new[] { typeof(IElementLocator), typeof(IEnumerable<By>) });
+                        var method = typeof(ProxyPageObjectMemberDecorator).GetMethod(nameof(DecorateEnumerableWrappedElement), new[] { typeof(IElementLocator), typeof(IEnumerable<By>) });
                         method = method.MakeGenericMethod(genericTypeArgument);
                         var element = method.Invoke(this, new object[] { elementLocator, bys });
 
@@ -83,7 +83,6 @@ namespace SeleniumExtras.PageObjects
                     return wrappedElement;
                 });
         }
-
 
         private object DecorateWebElement(IElementLocator elementLocator, IEnumerable<By> bys)
         {
