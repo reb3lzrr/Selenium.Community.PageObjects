@@ -37,21 +37,16 @@ namespace SeleniumExtras.PageObjects
         /// <param name="page">The pageObject</param>
         public void InitElements(object page)
         {
-            InitElements(page, _elementLocator);
-        }
-
-        internal void InitElements(object page, IElementLocator locator)
-        {
             if (page == null)
             {
                 throw new ArgumentNullException(nameof(page), "page cannot be null");
             }
 
-            if (locator == null)
-            {
-                throw new ArgumentNullException(nameof(locator), "locator cannot be null");
-            }
+            InitElements(page, _elementLocator);
+        }
 
+        internal void InitElements(object page, IElementLocator locator)
+        {
             foreach (var member in MembersToDecorate(page))
             {
                 var bys = member.GetCustomAttributes()

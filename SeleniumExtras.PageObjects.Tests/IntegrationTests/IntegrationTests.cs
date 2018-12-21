@@ -6,6 +6,7 @@ using FluentAssertions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
+using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.PageObjects.Tests.IntegrationTests.Page;
 using Xunit;
@@ -88,10 +89,12 @@ namespace SeleniumExtras.PageObjects.Tests.IntegrationTests
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterType<ChromeDriver>()
-                .WithParameter("service", ChromeDriverService.CreateDefaultService("."))
+            //builder.RegisterType<>()
+            //    .WithParameter("service", ChromeDriverService.CreateDefaultService("."))
             //builder.RegisterType<EdgeDriver>()
             //    .WithParameter("service", EdgeDriverService.CreateDefaultService("."))
+            builder.RegisterType<FirefoxDriver>()
+                .WithParameter("service", FirefoxDriverService.CreateDefaultService("."))
                 .As<IWebDriver>()
                 .As<IJavaScriptExecutor>()
                 .SingleInstance();

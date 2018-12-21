@@ -64,7 +64,6 @@ namespace SeleniumExtras.PageObjects
                 .Select(webElement => (T)CreateAndPopulateWrapsElement(typeof(T), webElement));
         }
 
-
         private object DecorateWebElement(IElementLocator elementLocator, IEnumerable<By> bys)
         {
             return WebElementProxy.Create(elementLocator, bys);
