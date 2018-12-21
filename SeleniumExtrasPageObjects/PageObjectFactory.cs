@@ -21,7 +21,7 @@ namespace SeleniumExtras.PageObjects
         public PageObjectFactory(IWebDriver driver)
         {
             _elementLocator = new DefaultElementLocator(driver);
-            _pageObjectMemberDecorator = new ProxyPageObjectMemberDecorator(new DefaultElementActivator(), this, new WebDriverWait(driver, TimeSpan.FromSeconds(10)));
+            _pageObjectMemberDecorator = new ProxyPageObjectMemberDecorator(new DefaultElementActivator(), this);
         }
 
         public PageObjectFactory(IElementLocator elementLocator, IPageObjectMemberDecorator pageObjectMemberDecorator)
