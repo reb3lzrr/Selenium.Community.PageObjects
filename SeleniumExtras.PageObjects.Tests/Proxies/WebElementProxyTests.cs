@@ -93,7 +93,7 @@ namespace SeleniumExtras.PageObjects.Tests.Proxies
             proxy.Click();
             proxy.Click();
 
-            //Thrid call will cause a StaleElementReferenceException
+            //Thrid (and higher) callcount will cause a StaleElementReferenceException
             Action action = () => proxy.Click();
 
             action.Should().Throw<StaleElementReferenceException>();

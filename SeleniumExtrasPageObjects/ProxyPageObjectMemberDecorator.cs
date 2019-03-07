@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Internal;
-using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.PageObjects.Proxies;
 
 namespace SeleniumExtras.PageObjects
@@ -14,7 +13,7 @@ namespace SeleniumExtras.PageObjects
         private readonly IElementActivator _elementActivator;
         private readonly PageObjectFactory _factory;
 
-        public ProxyPageObjectMemberDecorator(IElementActivator elementActivator, PageObjectFactory factory, DefaultWait<IWebDriver> webDriverWaiter)
+        public ProxyPageObjectMemberDecorator(IElementActivator elementActivator, PageObjectFactory factory)
         {
             _elementActivator = elementActivator;
             _factory = factory;
@@ -62,24 +61,7 @@ namespace SeleniumExtras.PageObjects
         public IEnumerable<T> DecorateEnumerableWrappedElement<T>(IElementLocator elementLocator, IEnumerable<By> bys)
         {
             return WebElementEnumerableProxy.Create(elementLocator, bys)
-                .Select(webElement =>
-                {
-                    var wrappedElement = _elementActivator.Create<T>(webElement);
-                    var wrappedElementProperty = wrappedElement.GetType()
-                        .GetMember("WrappedElement")
-                        .Single() as PropertyInfo;
-
-                    if (!wrappedElementProperty.CanWrite)
-                    {
-                        throw new Exception($"Can't write to {wrappedElementProperty}");
-                    }
-
-                    wrappedElementProperty.SetValue(wrappedElement, webElement);
-
-                    _factory.InitElements(wrappedElement, new DefaultElementLocator(webElement));
-
-                    return wrappedElement;
-                });
+                .Select(webElement => (T)CreateAndPopulateWrapsElement(typeof(T), webElement));
         }
 
         private object DecorateWebElement(IElementLocator elementLocator, IEnumerable<By> bys)
@@ -91,19 +73,20 @@ namespace SeleniumExtras.PageObjects
         {
             var element = WebElementProxy.Create(elementLocator, bys);
 
+            return CreateAndPopulateWrapsElement(typeToDecorate, element);
+        }
+
+        private object CreateAndPopulateWrapsElement(Type typeToDecorate, IWebElement element)
+        {
             var wrappedElement = _elementActivator.Create(typeToDecorate, element);
             var wrappedElementProperty = wrappedElement.GetType()
-                .GetMember("WrappedElement")
+                .GetMember(nameof(IWrapsElement.WrappedElement))
                 .Single() as PropertyInfo;
 
-            //TODO: pretify this
-            if (!wrappedElementProperty.CanWrite)
+            if (wrappedElementProperty?.CanWrite ?? false)
             {
-                throw new Exception($"Can't write to {wrappedElementProperty}");
+                wrappedElementProperty.SetValue(wrappedElement, element);
             }
-
-            wrappedElementProperty.SetValue(wrappedElement, element);
-
             _factory.InitElements(wrappedElement, new DefaultElementLocator(element));
 
             return wrappedElement;
