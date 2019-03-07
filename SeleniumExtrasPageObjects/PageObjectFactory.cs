@@ -64,20 +64,18 @@ namespace SeleniumExtras.PageObjects
 
                     //Decorates the member
                     var decoratedValue = _pageObjectMemberDecorator.Decorate(typeToDecorate, bys, locator);
-                    if (decoratedValue == null)
+                    if (decoratedValue != null)
                     {
-                        continue;
-                    }
-
-                    var field = member as FieldInfo;
-                    var property = member as PropertyInfo;
-                    if (field != null)
-                    {
-                        field.SetValue(page, decoratedValue);
-                    }
-                    else if (property != null)
-                    {
-                        property.SetValue(page, decoratedValue, null);
+                        var field = member as FieldInfo;
+                        var property = member as PropertyInfo;
+                        if (field != null)
+                        {
+                            field.SetValue(page, decoratedValue);
+                        }
+                        else if (property != null)
+                        {
+                            property.SetValue(page, decoratedValue, null);
+                        }
                     }
                 }
             }

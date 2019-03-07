@@ -13,13 +13,11 @@ namespace SeleniumExtras.PageObjects
     {
         private readonly IElementActivator _elementActivator;
         private readonly PageObjectFactory _factory;
-        private readonly DefaultWait<IWebDriver> _webDriverWaiter;
 
         public ProxyPageObjectMemberDecorator(IElementActivator elementActivator, PageObjectFactory factory, DefaultWait<IWebDriver> webDriverWaiter)
         {
             _elementActivator = elementActivator;
             _factory = factory;
-            _webDriverWaiter = webDriverWaiter;
         }
 
         public object Decorate(Type typeToDecorate, IEnumerable<By> bys, IElementLocator elementLocator)

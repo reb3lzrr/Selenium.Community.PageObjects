@@ -37,7 +37,7 @@ namespace SeleniumExtras.PageObjects
         /// <returns>An <see cref="IWebElement"/> which is the first match under the desired criteria.</returns>
         public IWebElement LocateElement(IEnumerable<By> bys)
         {
-            if (bys?.Any() == null)
+            if (bys?.Any() ?? false)
             {
                 throw new ArgumentNullException(nameof(bys), "List of criteria may not be null or empty");
             }
@@ -59,9 +59,9 @@ namespace SeleniumExtras.PageObjects
         /// <returns>A list of all elements which match the desired criteria.</returns>
         public IReadOnlyCollection<IWebElement> LocateElements(IEnumerable<By> bys)
         {
-            if (bys == null)
+            if (bys?.Any() ?? false)
             {
-                throw new ArgumentNullException(nameof(bys), "List of criteria may not be null");
+                throw new ArgumentNullException(nameof(bys), "List of criteria may not be null or empty");
             }
 
             return FindElements(bys, _searchContext).ToArray();

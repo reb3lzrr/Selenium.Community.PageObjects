@@ -4,8 +4,8 @@ using System;
 namespace SeleniumExtras.PageObjects
 {
     /// <summary>
-    /// An attribute that serves as the root for inheritence.
-    /// The <see cref="PageObjectFactory"></see> will search for <see cref="ByAttribute"/> and load the Element Accordingly
+    /// An attribute that serves as the root for inheritance.
+    /// <para>The <see cref="PageObjectFactory"></see> will search for <see cref="ByAttribute"/> and load the Element Accordingly</para>
     /// </summary>
     public abstract class ByAttribute : Attribute
     {

@@ -4,7 +4,7 @@ using System.Linq;
 namespace SeleniumExtras.PageObjects
 {
     /// <summary>
-    /// A default activator for use with the <see cref="PageObjectFactory"/>. This implementation 
+    /// A default activator used by the <see cref="PageObjectFactory"/>
     /// </summary>
     public class DefaultElementActivator : IElementActivator
     {
@@ -36,7 +36,7 @@ namespace SeleniumExtras.PageObjects
 
             if (ctorInfo == null)
             {
-                throw new Exception($"Unable to find a matching constructor on type {type} with provided parameters {string.Join(", ", parameters.Select(x => x.GetType().ToString()))}");
+                throw new ArgumentException($"Unable to find a matching constructor on type {type} with provided parameters {string.Join(", ", parameters.Select(x => x.GetType().ToString()))}", nameof(parameters));
             }
 
             return ctorInfo.constructor.Invoke(ctorInfo.matchedParameters);
