@@ -53,6 +53,19 @@ namespace SeleniumExtras.PageObjects.Tests.IntegrationTests
             }
         }
 
+
+        [Fact]
+        public void FindsMultipleItems_Recursive()
+        {
+            using (var container = Container.Build())
+            {
+                var testPageObject = container.Resolve<TestPageObject>();
+
+                testPageObject.Open();
+                testPageObject.MostPopularProducts.First().Price.Anchor.Text.Should().Be("vanaf € 1.574,63");
+            }
+        }
+
         [Fact]
         public void FindsMultipleItems_InRealTime()
         {

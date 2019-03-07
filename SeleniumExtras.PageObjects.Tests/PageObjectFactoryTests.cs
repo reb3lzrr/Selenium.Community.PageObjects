@@ -13,7 +13,7 @@ namespace SeleniumExtras.PageObjects.Tests
     {
         [Theory]
         [AutoDomainData]
-        public void PageObjectFactory_DoesntDecorateUndecoratedMembers([Frozen] Mock<IPageObjectMemberDecorator> memberDecoratorMock,
+        public void PageObjectFactory_DoesNotDecorateUndecoratedMembers([Frozen] Mock<IPageObjectMemberDecorator> memberDecoratorMock,
             PageObjectFactory pageObjectFactory)
         {
             pageObjectFactory.InitElements(new PageObjectWithUndecoratedMembers());
@@ -88,7 +88,7 @@ namespace SeleniumExtras.PageObjects.Tests
         private int PrivateProperty { get; set; }
 
         [FindsBy(How.ClassName, "a")]
-        protected int ProtectedPoperty { get; set; }
+        protected int ProtectedProperty { get; set; }
 
         [FindsBy(How.ClassName, "a")]
         internal int InternalProperty { get; set; }
@@ -100,7 +100,7 @@ namespace SeleniumExtras.PageObjects.Tests
 
         public int ProtectedPropertyValue()
         {
-            return ProtectedPoperty;
+            return ProtectedProperty;
         }
 
         public int InternalPropertyValue()
