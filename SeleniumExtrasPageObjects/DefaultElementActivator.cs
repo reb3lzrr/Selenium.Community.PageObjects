@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace SeleniumExtras.PageObjects
 {
+
     /// <summary>
     /// A default activator for use with the <see cref="PageObjectFactory"/>. This implementation 
     /// </summary>
@@ -10,41 +12,55 @@ namespace SeleniumExtras.PageObjects
     {
         public object Create(Type type, params object[] parameters)
         {
-            var ctors = type.GetConstructors();
-            var ctorInfo = ctors
-                .Select(x =>
-                {
-                    var ctorParams = x.GetParameters();
+            var availableTypesDictionary = parameters
+                .Select(x => new { type = x.GetType(), obj = x })
+                .Concat(parameters.SelectMany(parameter => parameter.GetType().GetInterfaces().Select(x => new { type = x, obj = parameter })))
+                .GroupBy(x => x.type)
+                .ToDictionary(x => x.Key, x => x.First().obj);
 
-                    return new
-                    {
-                        constructor = x,
-                        constructorParameters = ctorParams,
-                        matchedParameters = ctorParams
-                            .Select(y =>
-                            {
-                                return parameters
-                                    .FirstOrDefault(z => z.GetType() == y.ParameterType || z.GetType().GetInterfaces().Intersect(y.ParameterType.GetInterfaces()).Any());
-                            })
-                            .Where(y => y != null)
-                            .ToArray()
-                    };
-                })
-                .Where(x => x.matchedParameters.Length == x.constructorParameters.Length)
-                .OrderByDescending(x => x.matchedParameters.Length)
+            var constructors = type
+                .GetConstructors()
+                .Select(x => new
+                {
+                    constructor = x,
+                    constructorParameters = x.GetParameters(),
+                    matchedParameters = x.GetParameters().Where(y => availableTypesDictionary.ContainsKey(y.ParameterType))
+                        .Select(y => availableTypesDictionary[y.ParameterType])
+                        .ToArray()
+                });
+
+            var invokaleConstructorInfo = constructors
+                .Where(x => x.matchedParameters.Count() == x.constructorParameters.Length)
+                .OrderByDescending(x => x.constructorParameters.Length)
                 .FirstOrDefault();
 
-            if (ctorInfo == null)
+            if (invokaleConstructorInfo == null)
             {
-                throw new Exception($"Unable to find a matching constructor on type {type} with provided parameters {string.Join(", ", parameters.Select(x => x.GetType().ToString()))}");
+                throw new ActivationException($"Unable to activate type {type}. No matching constructor was found with provided parameters {string.Join(", ", parameters.Select(x => x.GetType().ToString()))}");
             }
 
-            return ctorInfo.constructor.Invoke(ctorInfo.matchedParameters);
+            return invokaleConstructorInfo.constructor.Invoke(invokaleConstructorInfo.matchedParameters);
         }
 
         public T Create<T>(params object[] parameters)
         {
             return (T)Create(typeof(T), parameters);
+        }
+    }
+
+
+    public class ActivationException : Exception
+    {
+        public ActivationException()
+        {
+        }
+
+        public ActivationException(string message) : base(message)
+        {
+        }
+
+        public ActivationException(string message, Exception inner) : base(message, inner)
+        {
         }
     }
 }

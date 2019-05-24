@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using Autofac;
 using FluentAssertions;
 using OpenQA.Selenium;
@@ -39,7 +41,6 @@ namespace SeleniumExtras.PageObjects.Tests.IntegrationTests
             }
         }
 
-
         [Fact]
         public void FindsMultipleItems_InOrder()
         {
@@ -48,6 +49,7 @@ namespace SeleniumExtras.PageObjects.Tests.IntegrationTests
                 var testPageObject = container.Resolve<TestPageObject>();
 
                 testPageObject.Open();
+                var mostPopuplarSearches = testPageObject.MostPopularProducts.ToArray();
                 testPageObject.MostPopularProducts.Skip(0).First().Number.Text.Should().Be("1");
                 testPageObject.MostPopularProducts.Skip(1).First().Number.Text.Should().Be("2");
             }
@@ -87,14 +89,11 @@ namespace SeleniumExtras.PageObjects.Tests.IntegrationTests
     {
         public static IContainer Build()
         {
+            var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var builder = new ContainerBuilder();
 
-            //builder.RegisterType<>()
-            //    .WithParameter("service", ChromeDriverService.CreateDefaultService("."))
-            //builder.RegisterType<EdgeDriver>()
-            //    .WithParameter("service", EdgeDriverService.CreateDefaultService("."))
-            builder.RegisterType<FirefoxDriver>()
-                .WithParameter("service", FirefoxDriverService.CreateDefaultService("."))
+            builder.Register(c => EdgeDriverService.CreateDefaultService(path));
+            builder.RegisterType<EdgeDriver>()
                 .As<IWebDriver>()
                 .As<IJavaScriptExecutor>()
                 .SingleInstance();

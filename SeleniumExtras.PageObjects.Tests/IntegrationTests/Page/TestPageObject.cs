@@ -24,7 +24,6 @@ namespace SeleniumExtras.PageObjects.Tests.IntegrationTests.Page
             _pageObjectFactory.InitElements(this);
         }
 
-
         [FindsBy(How.CssSelector, "div.pwPortalPopularProductListing tbody tr")]
         public IEnumerable<ProductPageObject> MostPopularProducts { get; set; }
 
@@ -36,8 +35,11 @@ namespace SeleniumExtras.PageObjects.Tests.IntegrationTests.Page
 
         public class ProductPageObject : IWrapsElement
         {
-            public ProductPageObject(IWebElement wrappedElement)
+            private readonly IWebDriver _webDriver;
+
+            public ProductPageObject(IWebElement wrappedElement, IWebDriver webDriver)
             {
+                _webDriver = webDriver;
                 WrappedElement = wrappedElement;
             }
 
