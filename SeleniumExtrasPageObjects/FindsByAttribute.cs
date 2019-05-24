@@ -10,7 +10,7 @@ namespace SeleniumExtras.PageObjects
     /// </summary>
     /// <remarks>
     /// <para>
-    /// You can use this attribute by specifying the <see cref="_how"/> and <see cref="_uising"/> properties
+    /// You can use this attribute by specifying the <see cref="_how"/> and <see cref="_using"/> properties
     /// to indicate how to find the elements. This attribute can be used to decorate fields and properties
     /// in your Page Object classes. The <see cref="Type"/> of the field or property must be either
     /// <see cref="IWebElement"/> or IList{IWebElement}. Any other type will throw an
@@ -44,7 +44,7 @@ namespace SeleniumExtras.PageObjects
     {
         private By _finder;
         private readonly How _how;
-        private readonly string _uising;
+        private readonly string _using;
 
         /// <summary>
         /// Creates a new instance of the FindsByAttribute, allowing to 
@@ -54,42 +54,40 @@ namespace SeleniumExtras.PageObjects
         public FindsByAttribute(How how, string @using)
         {
             _how = how;
-            _uising = @using;
+            _using = @using;
         }
 
         /// <inheritdoc cref="ByAttribute.ByFinder"/>
         public override By ByFinder()
         {
-            return _finder = _finder ?? From(this);
+            return _finder = _finder ?? GetFinder();
         }
 
-        public By From(FindsByAttribute attribute)
+        private By GetFinder()
         {
             switch (_how)
             {
                 case How.Id:
-                    return By.Id(_uising);
+                    return By.Id(_using);
                 case How.Name:
-                    return By.Name(_uising);
+                    return By.Name(_using);
                 case How.TagName:
-                    return By.TagName(_uising);
+                    return By.TagName(_using);
                 case How.ClassName:
-                    return By.ClassName(_uising);
+                    return By.ClassName(_using);
                 case How.CssSelector:
-                    return By.CssSelector(_uising);
+                    return By.CssSelector(_using);
                 case How.LinkText:
-                    return By.LinkText(_uising);
+                    return By.LinkText(_using);
                 case How.PartialLinkText:
-                    return By.PartialLinkText(_uising);
+                    return By.PartialLinkText(_using);
                 case How.XPath:
-                    return By.XPath(_uising);
+                    return By.XPath(_using);
                 default:
-                    throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Did not know how to construct How from how {0}, using {1}", _how, _uising));
+                    throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Did not know how to construct How from how {0}, using {1}", _how, _using));
             }
         }
-
-
-       
+  
         /// <summary>
         /// Determines whether the specified <see cref="object">Object</see> is equal
         /// to the current <see cref="object">Object</see>.
@@ -101,11 +99,6 @@ namespace SeleniumExtras.PageObjects
         /// <see langword="false"/>.</returns>
         public override bool Equals(object obj)
         {
-            if (obj == null)
-            {
-                return false;
-            }
-
             var other = obj as FindsByAttribute;
             if (other == null)
             {

@@ -49,7 +49,21 @@ namespace SeleniumExtras.PageObjects.Tests.IntegrationTests.Page
             public IWebElement Number { get; set; }
 
             [FindsBy(How.CssSelector, "p.price")]
-            public IWebElement Price { get; set; }
+            public PricePageObject Price { get; set; }
+
+            public class PricePageObject : IWrapsElement
+            {
+                public IWebElement WrappedElement { get; }
+
+                public PricePageObject(IWebElement wrappedElement)
+                {
+                    WrappedElement = wrappedElement;
+                }
+
+                [FindsBy(How.CssSelector, "a")]
+                public IWebElement Anchor { get; set; }
+
+            }
         }
     }
 }

@@ -13,7 +13,7 @@ namespace SeleniumExtras.PageObjects.Tests
     {
         [Theory]
         [AutoDomainData]
-        public void PageObjectFactory_DoesntDecorateUndecoratedMembers([Frozen] Mock<IPageObjectMemberDecorator> memberDecoratorMock,
+        public void PageObjectFactory_DoesNotDecorateUndecoratedMembers([Frozen] Mock<IPageObjectMemberDecorator> memberDecoratorMock,
             PageObjectFactory pageObjectFactory)
         {
             pageObjectFactory.InitElements(new PageObjectWithUndecoratedMembers());
@@ -27,7 +27,7 @@ namespace SeleniumExtras.PageObjects.Tests
         [AutoDomainData]
         public void PageObjectFactory_DecoratesFields([Frozen] Mock<IPageObjectMemberDecorator> memberDecoratorMock,
             PageObjectFactory pageObjectFactory,
-            WhatIsMyPrivateFieldValue pageObject,
+            PageObjectWithFields pageObject,
             int value)
         {
             memberDecoratorMock.Setup(x => x.Decorate(typeof(int),
@@ -52,7 +52,7 @@ namespace SeleniumExtras.PageObjects.Tests
         [AutoDomainData]
         public void PageObjectFactory_DecoratesProperties([Frozen] Mock<IPageObjectMemberDecorator> memberDecoratorMock,
             PageObjectFactory pageObjectFactory,
-            PageObjectWithDecoratedProperties pageObject,
+            PageObjectWithProperties pageObject,
             int value)
         {
             memberDecoratorMock.Setup(x => x.Decorate(typeof(int),
@@ -79,7 +79,7 @@ namespace SeleniumExtras.PageObjects.Tests
         public int UndecoratedLongField;
     }
 
-    public class PageObjectWithDecoratedProperties
+    public class PageObjectWithProperties
     {
         [FindsBy(How.ClassName, "a")]
         public int PublicProperty { get; set; }
@@ -88,7 +88,7 @@ namespace SeleniumExtras.PageObjects.Tests
         private int PrivateProperty { get; set; }
 
         [FindsBy(How.ClassName, "a")]
-        protected int ProtectedPoperty { get; set; }
+        protected int ProtectedProperty { get; set; }
 
         [FindsBy(How.ClassName, "a")]
         internal int InternalProperty { get; set; }
@@ -100,7 +100,7 @@ namespace SeleniumExtras.PageObjects.Tests
 
         public int ProtectedPropertyValue()
         {
-            return ProtectedPoperty;
+            return ProtectedProperty;
         }
 
         public int InternalPropertyValue()
@@ -109,7 +109,7 @@ namespace SeleniumExtras.PageObjects.Tests
         }
     }
 
-    public class WhatIsMyPrivateFieldValue
+    public class PageObjectWithFields
     {
         [FindsBy(How.ClassName, "a")]
         public int PublicField;

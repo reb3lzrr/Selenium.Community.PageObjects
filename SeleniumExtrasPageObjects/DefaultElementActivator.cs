@@ -4,9 +4,8 @@ using System.Runtime.Serialization;
 
 namespace SeleniumExtras.PageObjects
 {
-
     /// <summary>
-    /// A default activator for use with the <see cref="PageObjectFactory"/>. This implementation 
+    /// A default activator used by the <see cref="PageObjectFactory"/>
     /// </summary>
     public class DefaultElementActivator : IElementActivator
     {

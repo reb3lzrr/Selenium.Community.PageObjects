@@ -1,7 +1,9 @@
-﻿namespace SeleniumExtras.PageObjects
+﻿using OpenQA.Selenium;
+
+namespace SeleniumExtras.PageObjects
 {
     /// <summary>
-    /// Provides the lookup methods for the FindsBy attribute (for using in PageObjects)
+    /// Provides possible ways of locating <see cref="IWebElement"/>. Used in conjuncture with <see cref="FindsByAttribute"/>.
     /// </summary>
     public enum How
     {

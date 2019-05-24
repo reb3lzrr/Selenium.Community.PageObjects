@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="SeleniumExtras.PageObjects.Tests.csproj.DotSettings" />
     <None Remove="test.css" />
     <None Remove="test.html" />
   </ItemGroup>
