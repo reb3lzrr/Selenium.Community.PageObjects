@@ -84,12 +84,26 @@ namespace SeleniumExtras.PageObjects.Tests.IntegrationTests
         {
             var builder = new ContainerBuilder();
 
-            var driverService = FirefoxDriverService.CreateDefaultService();
+            FirefoxDriverService driverService = null;
+            var firefoxOptions = new FirefoxOptions();
+#if !DEBUG
+            driverService = FirefoxDriverService.CreateDefaultService();
             driverService.FirefoxBinaryPath = @"C:\Program Files (x86)\Mozilla Firefox\firefox.exe";
             driverService.HideCommandPromptWindow = true;
             driverService.SuppressInitialDiagnosticInformation = true;
+#endif
+#if DEBUG
+            driverService = FirefoxDriverService.CreateDefaultService(Environment.CurrentDirectory);
+#endif
 
-            builder.Register(c => new FirefoxDriver(driverService, new FirefoxOptions(), TimeSpan.FromSeconds(60))).As<IWebDriver>();
+            builder.Register(c => new FirefoxDriver(driverService, firefoxOptions , TimeSpan.FromSeconds(60)))
+                .As<IWebDriver>()
+                .SingleInstance()
+                .OnRelease(firefoxDriver =>
+                {
+                    firefoxDriver.Quit();
+                    firefoxDriver.Dispose();
+                });
             builder.RegisterType<PageObjectFactory>();
             builder.RegisterType<TestPageObject>();
 
