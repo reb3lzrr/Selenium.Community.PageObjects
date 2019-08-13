@@ -18,10 +18,10 @@ namespace SeleniumExtras.PageObjects
         private const BindingFlags PublicBindingOptions = BindingFlags.Instance | BindingFlags.Public;
         private const BindingFlags NonPublicBindingOptions = BindingFlags.Instance | BindingFlags.NonPublic;
 
-        public PageObjectFactory(IWebDriver driver)
+        public PageObjectFactory(IWebDriver webDriver)
         {
-            _elementLocator = new DefaultElementLocator(driver);
-            _pageObjectMemberDecorator = new ProxyPageObjectMemberDecorator(new DefaultElementActivator(), this);
+            _elementLocator = new DefaultElementLocator(webDriver);
+            _pageObjectMemberDecorator = new ProxyPageObjectMemberDecorator(new DefaultElementActivator(), this, webDriver);
         }
 
         public PageObjectFactory(IElementLocator elementLocator, IPageObjectMemberDecorator pageObjectMemberDecorator)

@@ -43,9 +43,8 @@ namespace SeleniumExtras.PageObjects.Tests.IntegrationTests
                 var testPageObject = container.Resolve<TestPageObject>();
 
                 testPageObject.Open();
-                var mostPopuplarSearches = testPageObject.MostPopularProducts.ToArray();
-                mostPopuplarSearches.Skip(0).First().Number.Text.Should().Be("1");
-                mostPopuplarSearches.Skip(1).First().Number.Text.Should().Be("2");
+                testPageObject.MostPopularProducts.Skip(0).First().Number.Text.Should().Be("1");
+                testPageObject.MostPopularProducts.Skip(1).First().Number.Text.Should().Be("2");
             }
         }
 
@@ -86,6 +85,7 @@ namespace SeleniumExtras.PageObjects.Tests.IntegrationTests
 
             FirefoxDriverService driverService = null;
             var firefoxOptions = new FirefoxOptions();
+            firefoxOptions.AddArgument("--headless");
 #if !DEBUG
             driverService = FirefoxDriverService.CreateDefaultService();
             driverService.FirefoxBinaryPath = @"C:\Program Files (x86)\Mozilla Firefox\firefox.exe";
@@ -98,6 +98,7 @@ namespace SeleniumExtras.PageObjects.Tests.IntegrationTests
 
             builder.Register(c => new FirefoxDriver(driverService, firefoxOptions , TimeSpan.FromSeconds(60)))
                 .As<IWebDriver>()
+                .As<IJavaScriptExecutor>()
                 .SingleInstance()
                 .OnRelease(firefoxDriver =>
                 {

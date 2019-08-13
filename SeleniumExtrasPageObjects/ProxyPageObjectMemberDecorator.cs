@@ -12,11 +12,13 @@ namespace SeleniumExtras.PageObjects
     {
         private readonly IElementActivator _elementActivator;
         private readonly PageObjectFactory _factory;
+        private readonly IWebDriver _webDriver;
 
-        public ProxyPageObjectMemberDecorator(IElementActivator elementActivator, PageObjectFactory factory)
+        public ProxyPageObjectMemberDecorator(IElementActivator elementActivator, PageObjectFactory factory, IWebDriver webDriver)
         {
             _elementActivator = elementActivator;
             _factory = factory;
+            _webDriver = webDriver;
         }
 
         public object Decorate(Type typeToDecorate, IEnumerable<By> bys, IElementLocator elementLocator)
@@ -78,11 +80,11 @@ namespace SeleniumExtras.PageObjects
 
         private object CreateAndPopulateWrapsElement(Type typeToDecorate, IWebElement element)
         {
-            var wrappedElement = _elementActivator.Create(typeToDecorate, element);
+            var wrappedElement = _elementActivator.Create(typeToDecorate, element, _webDriver);
             var wrappedElementProperty = wrappedElement.GetType()
                 .GetMember(nameof(IWrapsElement.WrappedElement))
                 .Single() as PropertyInfo;
-
+            
             if (wrappedElementProperty?.CanWrite ?? false)
             {
                 wrappedElementProperty.SetValue(wrappedElement, element);
