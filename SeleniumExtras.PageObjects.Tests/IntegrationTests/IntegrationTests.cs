@@ -1,15 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using Autofac;
 using FluentAssertions;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
-using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.PageObjects.Tests.IntegrationTests.Page;
 using Xunit;
 
@@ -50,8 +44,8 @@ namespace SeleniumExtras.PageObjects.Tests.IntegrationTests
 
                 testPageObject.Open();
                 var mostPopuplarSearches = testPageObject.MostPopularProducts.ToArray();
-                testPageObject.MostPopularProducts.Skip(0).First().Number.Text.Should().Be("1");
-                testPageObject.MostPopularProducts.Skip(1).First().Number.Text.Should().Be("2");
+                mostPopuplarSearches.Skip(0).First().Number.Text.Should().Be("1");
+                mostPopuplarSearches.Skip(1).First().Number.Text.Should().Be("2");
             }
         }
 
@@ -84,32 +78,18 @@ namespace SeleniumExtras.PageObjects.Tests.IntegrationTests
         }
     }
 
-    public static class Extensions
-    {
-        public static IEnumerable<T> WaitUntil<T>(this IEnumerable<T> obj, Func<IEnumerable<T>, bool> condition)
-        {
-            var waiter = new DefaultWait<IEnumerable<T>>(obj)
-            {
-                PollingInterval = TimeSpan.FromMilliseconds(50),
-                Timeout = TimeSpan.FromSeconds(10)
-            };
-            waiter.Until(condition);
-            return obj;
-        }
-    }
-
     public static class Container
     {
         public static IContainer Build()
         {
-            var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var builder = new ContainerBuilder();
 
-            builder.Register(c => EdgeDriverService.CreateDefaultService(path));
-            builder.RegisterType<EdgeDriver>()
-                .As<IWebDriver>()
-                .As<IJavaScriptExecutor>()
-                .SingleInstance();
+            var driverService = FirefoxDriverService.CreateDefaultService();
+            driverService.FirefoxBinaryPath = @"C:\Program Files (x86)\Mozilla Firefox\firefox.exe";
+            driverService.HideCommandPromptWindow = true;
+            driverService.SuppressInitialDiagnosticInformation = true;
+
+            builder.Register(c => new FirefoxDriver(driverService, new FirefoxOptions(), TimeSpan.FromSeconds(60)));
             builder.RegisterType<PageObjectFactory>();
             builder.RegisterType<TestPageObject>();
 
