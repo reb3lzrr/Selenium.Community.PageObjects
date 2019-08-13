@@ -89,7 +89,7 @@ namespace SeleniumExtras.PageObjects.Tests.IntegrationTests
             driverService.HideCommandPromptWindow = true;
             driverService.SuppressInitialDiagnosticInformation = true;
 
-            builder.Register(c => new FirefoxDriver(driverService, new FirefoxOptions(), TimeSpan.FromSeconds(60)));
+            builder.Register(c => new FirefoxDriver(driverService, new FirefoxOptions(), TimeSpan.FromSeconds(60))).As<IWebDriver>();
             builder.RegisterType<PageObjectFactory>();
             builder.RegisterType<TestPageObject>();
 
