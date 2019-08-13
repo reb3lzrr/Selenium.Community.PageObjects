@@ -5,7 +5,12 @@ VisualStudioVersion = 15.0.28010.2003
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeleniumExtras.PageObjects", "SeleniumExtrasPageObjects\SeleniumExtras.PageObjects.csproj", "{11F4FD38-87CB-4B01-AF8E-19A7B0EDA191}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeleniumExtras.PageObjects.Tests", "SeleniumExtras.PageObjects.Tests\SeleniumExtras.PageObjects.Tests.csproj", "{1AAF9050-D3ED-4615-9AFB-96BFCE137D93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeleniumExtras.PageObjects.Tests", "SeleniumExtras.PageObjects.Tests\SeleniumExtras.PageObjects.Tests.csproj", "{1AAF9050-D3ED-4615-9AFB-96BFCE137D93}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{474E513F-1C59-492E-81FC-431163236821}"
+	ProjectSection(SolutionItems) = preProject
+		appveyor.yml = appveyor.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

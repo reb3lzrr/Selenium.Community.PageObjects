@@ -4,6 +4,9 @@ configuration: Release
 
 os: Visual Studio 2017
 
+before_build:
+  - nuget restore
+
 environment:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   NUGET_XMLDOC_MODE: skip
@@ -13,7 +16,3 @@ skip_tags: true
 clone_depth: 1
 
 test: off
-
-artifacts:
-- path: artifacts\packages\**\*.nupkg
-  name: MyGet
