@@ -2,7 +2,7 @@
 using System.Reflection;
 using OpenQA.Selenium;
 
-namespace SeleniumExtras.PageObjects.Proxies
+namespace Selenium.Community.PageObjects.Proxies
 {
     public class WebElementEnumerableProxy : DispatchProxy
     {

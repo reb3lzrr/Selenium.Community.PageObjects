@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using OpenQA.Selenium;
 
-namespace SeleniumExtras.PageObjects
+namespace Selenium.Community.PageObjects
 {
     /// <summary>
     /// Interface describing how elements are to be located by a <see cref="PageObjectFactory"/>.

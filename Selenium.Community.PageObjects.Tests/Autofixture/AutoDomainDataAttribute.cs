@@ -1,10 +1,10 @@
-﻿using AutoFixture;
+﻿using System;
+using AutoFixture;
 using AutoFixture.AutoMoq;
 using AutoFixture.Kernel;
 using AutoFixture.Xunit2;
-using System;
 
-namespace SeleniumExtras.PageObjects.Tests.Autofixture
+namespace Selenium.Community.PageObjects.Tests.Autofixture
 {
     internal class AutoDomainDataAttribute : AutoDataAttribute
     {

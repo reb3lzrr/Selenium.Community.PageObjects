@@ -6,10 +6,10 @@ using AutoFixture.Xunit2;
 using FluentAssertions;
 using Moq;
 using OpenQA.Selenium;
-using SeleniumExtras.PageObjects.Tests.Autofixture;
+using Selenium.Community.PageObjects.Tests.Autofixture;
 using Xunit;
 
-namespace SeleniumExtras.PageObjects.Tests
+namespace Selenium.Community.PageObjects.Tests
 {
     public class DefaultElementLocatorTests
     {

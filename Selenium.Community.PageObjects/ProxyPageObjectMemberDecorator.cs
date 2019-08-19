@@ -4,9 +4,9 @@ using System.Linq;
 using System.Reflection;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Internal;
-using SeleniumExtras.PageObjects.Proxies;
+using Selenium.Community.PageObjects.Proxies;
 
-namespace SeleniumExtras.PageObjects
+namespace Selenium.Community.PageObjects
 {
     public class ProxyPageObjectMemberDecorator : IPageObjectMemberDecorator
     {

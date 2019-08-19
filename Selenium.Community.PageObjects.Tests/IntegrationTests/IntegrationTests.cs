@@ -4,10 +4,10 @@ using Autofac;
 using FluentAssertions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
-using SeleniumExtras.PageObjects.Tests.IntegrationTests.Page;
+using Selenium.Community.PageObjects.Tests.IntegrationTests.Page;
 using Xunit;
 
-namespace SeleniumExtras.PageObjects.Tests.IntegrationTests
+namespace Selenium.Community.PageObjects.Tests.IntegrationTests
 {
     public class IntegrationTests
     {

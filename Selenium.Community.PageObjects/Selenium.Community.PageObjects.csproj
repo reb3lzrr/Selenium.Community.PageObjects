@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <AssemblyName>Selenium.Community.PageObjects</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

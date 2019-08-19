@@ -2,11 +2,11 @@
 using System.Linq;
 using Moq;
 using OpenQA.Selenium;
-using SeleniumExtras.PageObjects.Proxies;
-using SeleniumExtras.PageObjects.Tests.Autofixture;
+using Selenium.Community.PageObjects.Proxies;
+using Selenium.Community.PageObjects.Tests.Autofixture;
 using Xunit;
 
-namespace SeleniumExtras.PageObjects.Tests.Proxies
+namespace Selenium.Community.PageObjects.Tests.Proxies
 {
     public class WebElementEnumerableProxyTests
     {

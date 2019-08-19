@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
 
-namespace SeleniumExtras.PageObjects
+namespace Selenium.Community.PageObjects
 {
     /// <summary>
     /// Provides the ability to produce Page Objects modeling a page

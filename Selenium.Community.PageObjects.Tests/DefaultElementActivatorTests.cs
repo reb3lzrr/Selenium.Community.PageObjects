@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using FluentAssertions;
-using SeleniumExtras.PageObjects.Tests.Autofixture;
+using Selenium.Community.PageObjects.Tests.Autofixture;
 using Xunit;
 
-namespace SeleniumExtras.PageObjects.Tests
+namespace Selenium.Community.PageObjects.Tests
 {
     public class DefaultElementActivatorTests
     {

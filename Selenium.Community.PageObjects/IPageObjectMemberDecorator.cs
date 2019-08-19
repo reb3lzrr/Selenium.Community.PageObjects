@@ -1,8 +1,8 @@
-﻿using OpenQA.Selenium;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using OpenQA.Selenium;
 
-namespace SeleniumExtras.PageObjects
+namespace Selenium.Community.PageObjects
 {
     /// <summary>
     /// Interface describing how members of a class which represent elements in a Page Object

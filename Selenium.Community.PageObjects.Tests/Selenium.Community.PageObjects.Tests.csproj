@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFrameworks>netcoreapp2.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
+    <AssemblyName>Selenium.Community.PageObjects.Tests</AssemblyName>
+    <RootNamespace>Selenium.Community.PageObjects.Tests</RootNamespace>
   </PropertyGroup>  
 
   <ItemGroup>
@@ -42,7 +44,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SeleniumExtrasPageObjects\SeleniumExtras.PageObjects.csproj" />
+    <ProjectReference Include="..\Selenium.Community.PageObjects\Selenium.Community.PageObjects.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Linq;
-using System.Runtime.Serialization;
 
-namespace SeleniumExtras.PageObjects
+namespace Selenium.Community.PageObjects
 {
     /// <summary>
     /// A default activator used by the <see cref="PageObjectFactory"/>

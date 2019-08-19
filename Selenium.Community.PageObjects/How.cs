@@ -1,6 +1,6 @@
 ﻿using OpenQA.Selenium;
 
-namespace SeleniumExtras.PageObjects
+namespace Selenium.Community.PageObjects
 {
     /// <summary>
     /// Provides possible ways of locating <see cref="IWebElement"/>. Used in conjuncture with <see cref="FindsByAttribute"/>.

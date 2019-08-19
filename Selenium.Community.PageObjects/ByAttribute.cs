@@ -1,7 +1,7 @@
-﻿using OpenQA.Selenium;
-using System;
+﻿using System;
+using OpenQA.Selenium;
 
-namespace SeleniumExtras.PageObjects
+namespace Selenium.Community.PageObjects
 {
     /// <summary>
     /// An attribute that serves as the root for inheritance.

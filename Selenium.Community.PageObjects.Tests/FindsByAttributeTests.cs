@@ -2,7 +2,7 @@
 using OpenQA.Selenium;
 using Xunit;
 
-namespace SeleniumExtras.PageObjects.Tests
+namespace Selenium.Community.PageObjects.Tests
 {
     public class FindsByAttributeTests
     {

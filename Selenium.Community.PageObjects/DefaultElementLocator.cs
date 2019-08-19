@@ -4,7 +4,7 @@ using System.Linq;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
-namespace SeleniumExtras.PageObjects
+namespace Selenium.Community.PageObjects
 {
     /// <summary>
     /// A default locator for elements for use with the <see cref="PageObjectFactory"/>. This locator

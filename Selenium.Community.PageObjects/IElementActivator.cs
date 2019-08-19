@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SeleniumExtras.PageObjects
+namespace Selenium.Community.PageObjects
 {
     /// <summary>
     /// An interface describing an activator for members of a PageObject, to use with the <see cref="PageObjectFactory"/>.
