@@ -14,12 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="IntegrationTests\Page\test.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="IntegrationTests\Page\test.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

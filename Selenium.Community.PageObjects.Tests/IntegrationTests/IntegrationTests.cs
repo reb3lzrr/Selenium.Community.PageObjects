@@ -19,7 +19,7 @@ namespace Selenium.Community.PageObjects.Tests.IntegrationTests
                 var testPageObject = container.Resolve<TestPageObject>();
 
                 testPageObject.Open();
-                testPageObject.PopularSearchesTitle.Text.Should().Contain("Populaire zoekopdrachten");
+                testPageObject.PopularSearchesTitle.Text.Should().Contain("Popular searches");
             }
         }
 
@@ -43,8 +43,8 @@ namespace Selenium.Community.PageObjects.Tests.IntegrationTests
                 var testPageObject = container.Resolve<TestPageObject>();
 
                 testPageObject.Open();
-                testPageObject.MostPopularProducts.Skip(0).First().Number.Text.Should().Be("1");
-                testPageObject.MostPopularProducts.Skip(1).First().Number.Text.Should().Be("2");
+                testPageObject.PopularProducts.Skip(0).First().Name.Text.Should().Be("LG OLED C8");
+                testPageObject.PopularProducts.Skip(1).First().Name.Text.Should().Be("Samsung Galaxy S9 Dual Sim");
             }
         }
 
@@ -57,7 +57,7 @@ namespace Selenium.Community.PageObjects.Tests.IntegrationTests
                 var testPageObject = container.Resolve<TestPageObject>();
 
                 testPageObject.Open();
-                testPageObject.MostPopularProducts.First().Price.Anchor.Text.Should().Be("vanaf € 1.574,63");
+                testPageObject.PopularProducts.First().Price.Price.Should().Be("€ 1.574,63");
             }
         }
 
@@ -70,9 +70,9 @@ namespace Selenium.Community.PageObjects.Tests.IntegrationTests
                 var javaScriptExecutor = container.Resolve<IJavaScriptExecutor>();
 
                 testPageObject.Open();
-                testPageObject.MostPopularProducts.Should().HaveCount(10);
-                javaScriptExecutor.ExecuteScript("document.querySelectorAll('div.pwPortalPopularProductListing tbody tr:nth-of-type(2n)').forEach(e => e.remove())");
-                testPageObject.MostPopularProducts.Should().HaveCount(6);
+                testPageObject.PopularProducts.Should().HaveCount(10);
+                javaScriptExecutor.ExecuteScript("document.querySelectorAll('#popularProducts div.media:nth-of-type(2n)').forEach(e => e.remove())");
+                testPageObject.PopularProducts.Should().HaveCount(6);
             }
         }
     }
@@ -85,8 +85,9 @@ namespace Selenium.Community.PageObjects.Tests.IntegrationTests
 
             FirefoxDriverService driverService = null;
             var firefoxOptions = new FirefoxOptions();
-            firefoxOptions.AddArgument("--headless");
+
 #if !DEBUG
+            firefoxOptions.AddArgument("--headless");
             driverService = FirefoxDriverService.CreateDefaultService();
             driverService.FirefoxBinaryPath = @"C:\Program Files (x86)\Mozilla Firefox\firefox.exe";
             driverService.HideCommandPromptWindow = true;

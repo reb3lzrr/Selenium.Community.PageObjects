@@ -24,14 +24,15 @@ namespace Selenium.Community.PageObjects.Tests.IntegrationTests.Page
             _pageObjectFactory.InitElements(this);
         }
 
-        [FindsBy(How.CssSelector, "div.pwPortalPopularProductListing tbody tr")]
-        public IEnumerable<ProductPageObject> MostPopularProducts { get; set; }
+        [FindsBy(How.CssSelector, "#popularProducts div.media")]
+        public IEnumerable<ProductPageObject> PopularProducts { get; set; }
 
-        [FindsBy(How.CssSelector, "div.greyTopBorderBlock.popularsearches")]
+        [FindsBy(How.CssSelector, "#popularSearches h2")]
         public IWebElement PopularSearchesTitle { get; set; }
 
-        [FindsBy(How.CssSelector, "div.greyTopBorderBlock.popularsearches a")]
+        [FindsBy(How.CssSelector, "#popularSearches > nav > a")]
         public IEnumerable<IWebElement> PopularSearches { get; set; }
+
 
         public class ProductPageObject : IWrapsElement
         {
@@ -45,24 +46,23 @@ namespace Selenium.Community.PageObjects.Tests.IntegrationTests.Page
 
             public IWebElement WrappedElement { get; set; }
 
-            [FindsBy(How.CssSelector, "span.counter")]
-            public IWebElement Number { get; set; }
+            [FindsBy(How.CssSelector, "h5")]
+            public IWebElement Name { get; set; }
 
             [FindsBy(How.CssSelector, "p.price")]
             public PricePageObject Price { get; set; }
 
             public class PricePageObject : IWrapsElement
             {
-                public IWebElement WrappedElement { get; }
-
                 public PricePageObject(IWebElement wrappedElement)
                 {
                     WrappedElement = wrappedElement;
+                    Price = wrappedElement.Text;
                 }
 
-                [FindsBy(How.CssSelector, "a")]
-                public IWebElement Anchor { get; set; }
+                public IWebElement WrappedElement { get; }
 
+                public string Price { get; }
             }
         }
     }
