@@ -2,7 +2,7 @@
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using AutoFixture.Kernel;
-using AutoFixture.Xunit2;
+using AutoFixture.NUnit3;
 
 namespace Selenium.Community.PageObjects.Tests.Autofixture
 {

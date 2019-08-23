@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using AutoFixture.Xunit2;
+using AutoFixture.NUnit3;
 using FluentAssertions;
 using Moq;
+using NUnit.Framework;
 using OpenQA.Selenium;
 using Selenium.Community.PageObjects.Tests.Autofixture;
-using Xunit;
 
 namespace Selenium.Community.PageObjects.Tests
 {
