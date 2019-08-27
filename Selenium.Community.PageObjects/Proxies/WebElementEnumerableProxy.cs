@@ -11,9 +11,7 @@ namespace Selenium.Community.PageObjects.Proxies
 
         protected override object Invoke(MethodInfo targetMethod, object[] args)
         {
-            var webElements = _elementLocator.LocateElements(_bys);
-
-            return targetMethod.Invoke(webElements, args);
+            return targetMethod.Invoke(_elementLocator.LocateElements(_bys), args);
         }
 
         public static IEnumerable<IWebElement> Create(IElementLocator elementLocator, IEnumerable<By> bys)

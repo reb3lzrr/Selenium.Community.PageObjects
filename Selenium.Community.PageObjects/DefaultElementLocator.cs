@@ -25,7 +25,7 @@ namespace Selenium.Community.PageObjects
             _searchContext = searchContext ?? throw new ArgumentException("The SearchContext of the locator object cannot be null", nameof(searchContext));
             _waiter = new DefaultWait<ISearchContext>(searchContext)
             {
-                PollingInterval = TimeSpan.FromMilliseconds(50),
+                PollingInterval = TimeSpan.FromMilliseconds(5),
                 Timeout = TimeSpan.FromSeconds(10)
             };
         }
@@ -69,17 +69,7 @@ namespace Selenium.Community.PageObjects
 
         private IEnumerable<IWebElement> FindElements(IEnumerable<By> bys, ISearchContext searchContext)
         {
-            return bys.SelectMany(by =>
-            {
-                try
-                {
-                    return searchContext.FindElements(by).AsEnumerable();
-                }
-                catch (NoSuchElementException)
-                {
-                    return new IWebElement[0];
-                }
-            });
+            return bys.SelectMany(searchContext.FindElements);
         }
     }
 }
