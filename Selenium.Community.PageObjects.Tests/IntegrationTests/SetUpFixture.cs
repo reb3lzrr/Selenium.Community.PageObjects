@@ -32,10 +32,9 @@ namespace Selenium.Community.PageObjects.Tests.IntegrationTests
             IWebDriver webDriver = null;
 
 #if !DEBUG
-            FirefoxDriverService driverService = null;
-            firefoxOptions = new FirefoxOptions();
+            var firefoxOptions = new FirefoxOptions();
             firefoxOptions.AddArgument("--headless");
-            driverService = FirefoxDriverService.CreateDefaultService();
+            var driverService = FirefoxDriverService.CreateDefaultService();
             driverService.FirefoxBinaryPath = @"C:\Program Files (x86)\Mozilla Firefox\firefox.exe";
             driverService.HideCommandPromptWindow = true;
             driverService.SuppressInitialDiagnosticInformation = true;
