@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using FluentAssertions;
+using NUnit.Framework;
 using Selenium.Community.PageObjects.Tests.Autofixture;
-using Xunit;
 
 namespace Selenium.Community.PageObjects.Tests
 {

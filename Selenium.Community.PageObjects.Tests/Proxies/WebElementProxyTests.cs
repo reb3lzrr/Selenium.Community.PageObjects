@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using FluentAssertions;
 using Moq;
+using NUnit.Framework;
 using OpenQA.Selenium;
 using Selenium.Community.PageObjects.Proxies;
 using Selenium.Community.PageObjects.Tests.Autofixture;
-using Xunit;
 
 namespace Selenium.Community.PageObjects.Tests.Proxies
 {
