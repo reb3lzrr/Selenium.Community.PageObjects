@@ -69,7 +69,17 @@ namespace Selenium.Community.PageObjects
 
         private IEnumerable<IWebElement> FindElements(IEnumerable<By> bys, ISearchContext searchContext)
         {
-            return bys.SelectMany(searchContext.FindElements);
+            return bys.SelectMany(by =>
+            {
+                try
+                {
+                    return searchContext.FindElements(by).AsEnumerable();
+                }
+                catch (NoSuchElementException)
+                {
+                    return new IWebElement[0];
+                }
+            });
         }
     }
 }
