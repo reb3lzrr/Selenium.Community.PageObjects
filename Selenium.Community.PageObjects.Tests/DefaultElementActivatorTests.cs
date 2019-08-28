@@ -14,7 +14,9 @@ namespace Selenium.Community.PageObjects.Tests
             var sut = new DefaultElementActivator();
             var action = new Action(() => sut.Create<ClassWithMultipleConstructors>());
 
-            action.Should().Throw<ActivationException>().WithMessage($"Unable to activate type {typeof(ClassWithMultipleConstructors)}. No matching constructor was found with provided parameters {string.Join(", ", new object[0].Select(x => x.GetType().ToString()))}");
+            action.Should()
+                .Throw<ActivationException>()
+                .WithMessage("Cannot resolve parameter 'Selenium.Community.PageObjects.Tests.DefaultElementActivatorTests+Class1 class1' of constructor 'Void .ctor(Selenium.Community.PageObjects.Tests.DefaultElementActivatorTests+Class1)'.");
         }
 
         [Theory]
@@ -35,6 +37,14 @@ namespace Selenium.Community.PageObjects.Tests
             var instance = defaultElementActivator.Create<ClassWithMultipleConstructors>(class1);
 
             instance.Class1.Should().Be(class1);
+        }
+
+        [Theory]
+        [AutoDomainData]
+        public void DefaultElementActivator_Create_NoConstructor()
+        {
+            var defaultElementActivator = new DefaultElementActivator();
+            new Action(() => defaultElementActivator.Create<Class1>()).Should().NotThrow();
         }
 
         [Theory]

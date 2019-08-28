@@ -33,17 +33,25 @@ namespace Selenium.Community.PageObjects
                     constructorParameters = x.GetParameters(),
                     matchedParameters = x.GetParameters().Where(y => availableTypesDictionary.ContainsKey(y.ParameterType))
                         .Select(y => availableTypesDictionary[y.ParameterType])
-                        .ToArray()
-                });
+                        .ToArray(),
+                    unmatchedParameters = x.GetParameters().Where(y => !availableTypesDictionary.ContainsKey(y.ParameterType))
+                        .Select(y => y)
+                        .ToArray(),
+                })
+                .ToArray();
 
             var invokaleConstructorInfo = constructors
-                .Where(x => x.matchedParameters.Count() == x.constructorParameters.Length)
                 .OrderByDescending(x => x.constructorParameters.Length)
-                .FirstOrDefault();
+                .FirstOrDefault(x => x.matchedParameters.Count() == x.constructorParameters.Length);
 
             if (invokaleConstructorInfo == null)
             {
-                throw new ActivationException($"Unable to activate type {type}. No matching constructor was found with provided parameters {string.Join(", ", parameters.Select(x => x.GetType().ToString()))}");
+                var bestMatchConstructor = constructors
+                    .OrderBy(x => x.constructorParameters.Length)
+                    .First();
+                var unresolvedParameter = bestMatchConstructor.unmatchedParameters.First();
+
+                throw new ActivationException($"Cannot resolve parameter '{unresolvedParameter.ParameterType} {unresolvedParameter.Name}' of constructor 'Void .ctor({string.Join(", ", bestMatchConstructor.constructorParameters.Select(x => x.ParameterType))})'.");
             }
 
             return invokaleConstructorInfo.constructor.Invoke(invokaleConstructorInfo.matchedParameters);
