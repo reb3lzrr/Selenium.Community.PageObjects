@@ -44,7 +44,7 @@ namespace Selenium.Community.PageObjects
 
             try
             {
-                return _waiter.Until(searchContext => FindElements(bys, searchContext).FirstOrDefault());
+                return _waiter.Until(searchContext => FindElements(bys.Distinct(), searchContext).FirstOrDefault());
             }
             catch (WebDriverTimeoutException)
             {
@@ -64,7 +64,7 @@ namespace Selenium.Community.PageObjects
                 throw new ArgumentNullException(nameof(bys), "List of criteria may not be null or empty");
             }
 
-            return FindElements(bys, _searchContext).ToArray();
+            return FindElements(bys.Distinct(), _searchContext).ToArray();
         }
 
         private IEnumerable<IWebElement> FindElements(IEnumerable<By> bys, ISearchContext searchContext)

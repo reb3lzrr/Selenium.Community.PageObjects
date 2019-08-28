@@ -19,7 +19,7 @@ namespace Selenium.Community.PageObjects.Tests
                 WrappedElement = wrappedElement;
             }
 
-            public IWebElement WrappedElement { get; }
+            public IWebElement WrappedElement { get; private set; }
         }
 
         [Theory]
@@ -89,7 +89,6 @@ namespace Selenium.Community.PageObjects.Tests
                 .Callback(new Action<Type, object[]>((typeToActivate, args) =>
                 {
                     args[0].GetType().Name.Should().Contain("Proxy");
-                    args[1].Should().Be(webDriverMock.Object);
                 }))
                 .Returns(wrapsElement);
 

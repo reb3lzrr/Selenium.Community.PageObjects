@@ -24,7 +24,7 @@ namespace Selenium.Community.PageObjects
         public PageObjectFactory(IWebDriver webDriver)
         {
             _elementLocator = new DefaultElementLocator(webDriver);
-            _pageObjectMemberDecorator = new ProxyPageObjectMemberDecorator(new DefaultElementActivator(), this, webDriver);
+            _pageObjectMemberDecorator = new ProxyPageObjectMemberDecorator(new DefaultElementActivator(webDriver), this);
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Selenium.Community.PageObjects
         public PageObjectFactory(IElementLocator elementLocator, IPageObjectMemberDecorator pageObjectMemberDecorator)
         {
             _elementLocator = elementLocator ?? throw new ArgumentException("Argument can not be null", nameof(elementLocator));
-            _pageObjectMemberDecorator = pageObjectMemberDecorator;
+            _pageObjectMemberDecorator = pageObjectMemberDecorator ?? throw new ArgumentException("Argument can not be null", nameof(pageObjectMemberDecorator));
         }
 
         /// <summary>
@@ -64,13 +64,8 @@ namespace Selenium.Community.PageObjects
 
                 if (bys.Any())
                 {
-                    //Check if member can be written to
-                    if (!CanWriteToMember(member, out var typeToDecorate))
-                    {
-                        throw new MemberAccessException($"Can't write to {member.DeclaringType.Name}.{member.Name} whilst decorated with a {nameof(ByAttribute)}");
-                    }
-
                     //Decorates the member
+                    var typeToDecorate = GetMemberType(member);
                     var decoratedValue = _pageObjectMemberDecorator.Decorate(typeToDecorate, bys, locator);
                     if (decoratedValue != null)
                     {
@@ -105,22 +100,17 @@ namespace Selenium.Community.PageObjects
             return members;
         }
 
-        private static bool CanWriteToMember(MemberInfo member, out Type type)
+        private static Type GetMemberType(MemberInfo member)
         {
-            if (member is FieldInfo field)
+            switch (member)
             {
-                type = field.FieldType;
-                return true;
+                case FieldInfo field:
+                    return field.FieldType;
+                case PropertyInfo property:
+                    return  property.PropertyType;
+                default:
+                    throw new MemberAccessException($"Can't write to {member.DeclaringType.Name}.{member.Name} whilst decorated with a {nameof(ByAttribute)}");
             }
-
-            if (member is PropertyInfo property)
-            {
-                type = property.PropertyType;
-                return property.CanWrite;
-            }
-
-            type = null;
-            return false;
         }
     }
 }

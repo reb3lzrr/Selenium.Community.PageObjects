@@ -71,6 +71,31 @@ namespace Selenium.Community.PageObjects.Tests
             pageObject.ProtectedPropertyValue().Should().Be(value);
             pageObject.InternalPropertyValue().Should().Be(value);
         }
+
+
+        [Theory]
+        [AutoDomainData]
+        public void PageObjectFactory_DecoratesReadonlyFields([Frozen] Mock<IPageObjectMemberDecorator> memberDecoratorMock,
+            PageObjectFactory pageObjectFactory,
+            PageObjectWithReadonlyFields pageObject,
+            int value)
+        {
+            memberDecoratorMock.Setup(x => x.Decorate(typeof(int),
+                    It.IsAny<IEnumerable<By>>(),
+                    It.IsAny<IElementLocator>()))
+                .Returns(value);
+
+            pageObjectFactory.InitElements(pageObject);
+
+            memberDecoratorMock.Verify(x => x.Decorate(typeof(int),
+                It.IsAny<IEnumerable<By>>(),
+                It.IsAny<IElementLocator>()), Times.Exactly(4));
+
+            pageObject.PublicField.Should().Be(value);
+            pageObject.PrivateFieldValue().Should().Be(value);
+            pageObject.ProtectedFieldValue().Should().Be(value);
+            pageObject.InternalFieldValue().Should().Be(value);
+        }
     }
 
     public class PageObjectWithUndecoratedMembers
@@ -122,6 +147,36 @@ namespace Selenium.Community.PageObjects.Tests
 
         [FindsBy(How.ClassName, "a")]
         internal int InternalField = -1;
+
+        public int PrivateFieldValue()
+        {
+            return PrivateField;
+        }
+
+        public int ProtectedFieldValue()
+        {
+            return ProtectedField;
+        }
+
+        public int InternalFieldValue()
+        {
+            return InternalField;
+        }
+    }
+
+    public class PageObjectWithReadonlyFields
+    {
+        [FindsBy(How.ClassName, "a")]
+        public readonly int PublicField;
+
+        [FindsBy(How.ClassName, "a")]
+        private readonly int PrivateField = -1;
+
+        [FindsBy(How.ClassName, "a")]
+        protected readonly int ProtectedField;
+
+        [FindsBy(How.ClassName, "a")]
+        internal readonly int InternalField = -1;
 
         public int PrivateFieldValue()
         {

@@ -8,8 +8,17 @@ namespace Selenium.Community.PageObjects
     /// </summary>
     public class DefaultElementActivator : IElementActivator
     {
+        private readonly object[] _additionalParameters;
+
+        public DefaultElementActivator(params object[] additionalParameters)
+        {
+            _additionalParameters = additionalParameters;
+        }
+
         public object Create(Type type, params object[] parameters)
         {
+            parameters = parameters.Concat(_additionalParameters).ToArray();
+
             var availableTypesDictionary = parameters
                 .Select(x => new { type = x.GetType(), obj = x })
                 .Concat(parameters.SelectMany(parameter => parameter.GetType().GetInterfaces().Select(x => new { type = x, obj = parameter })))
