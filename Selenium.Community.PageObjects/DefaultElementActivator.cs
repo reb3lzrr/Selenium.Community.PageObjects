@@ -45,20 +45,4 @@ namespace Selenium.Community.PageObjects
             return (T)Create(typeof(T), parameters);
         }
     }
-
-
-    public class ActivationException : Exception
-    {
-        public ActivationException()
-        {
-        }
-
-        public ActivationException(string message) : base(message)
-        {
-        }
-
-        public ActivationException(string message, Exception inner) : base(message, inner)
-        {
-        }
-    }
 }

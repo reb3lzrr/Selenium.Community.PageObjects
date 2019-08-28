@@ -17,12 +17,21 @@ namespace Selenium.Community.PageObjects
         private const BindingFlags PublicBindingOptions = BindingFlags.Instance | BindingFlags.Public;
         private const BindingFlags NonPublicBindingOptions = BindingFlags.Instance | BindingFlags.NonPublic;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PageObjectFactory"/> class.
+        /// </summary>
+        /// <param name="webDriver"></param>
         public PageObjectFactory(IWebDriver webDriver)
         {
             _elementLocator = new DefaultElementLocator(webDriver);
             _pageObjectMemberDecorator = new ProxyPageObjectMemberDecorator(new DefaultElementActivator(), this, webDriver);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PageObjectFactory"/> class.
+        /// </summary>
+        /// <param name="elementLocator">The locator used to locate members</param>
+        /// <param name="pageObjectMemberDecorator">The MemberDecorator to use once members are found</param>
         public PageObjectFactory(IElementLocator elementLocator, IPageObjectMemberDecorator pageObjectMemberDecorator)
         {
             _elementLocator = elementLocator ?? throw new ArgumentException("Argument can not be null", nameof(elementLocator));
