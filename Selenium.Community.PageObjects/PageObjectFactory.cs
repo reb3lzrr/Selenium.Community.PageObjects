@@ -60,25 +60,33 @@ namespace Selenium.Community.PageObjects
                 var bys = member.GetCustomAttributes()
                     .Select(x => (x as ByAttribute)?.ByFinder())
                     .Where(x => x != null)
+                    .Distinct()
                     .ToArray();
 
                 if (bys.Any())
                 {
                     //Decorates the member
-                    var typeToDecorate = GetMemberType(member);
-                    var decoratedValue = _pageObjectMemberDecorator.Decorate(typeToDecorate, bys, locator);
-                    if (decoratedValue != null)
+                    if (CanWriteToMember(member, out var typeToDecorate))
                     {
-                        var field = member as FieldInfo;
-                        var property = member as PropertyInfo;
-                        if (field != null)
+                        var decoratedValue = _pageObjectMemberDecorator.Decorate(typeToDecorate, bys, locator);
+                        if (decoratedValue != null)
                         {
-                            field.SetValue(page, decoratedValue);
+                            var field = member as FieldInfo;
+                            var property = member as PropertyInfo;
+                            if (field != null)
+                            {
+                                field.SetValue(page, decoratedValue);
+                            }
+                            else if (property != null)
+                            {
+                                property.SetValue(page, decoratedValue, null);
+                            }
                         }
-                        else if (property != null)
-                        {
-                            property.SetValue(page, decoratedValue, null);
-                        }
+                    }
+                    else
+                    {
+                        //TODO: Exception
+                        throw new Exception("Can't write to member");
                     }
                 }
             }
@@ -100,17 +108,24 @@ namespace Selenium.Community.PageObjects
             return members;
         }
 
-        private static Type GetMemberType(MemberInfo member)
+        private static bool CanWriteToMember(MemberInfo member, out Type type)
         {
-            switch (member)
+            type = null;
+            var result = false;
+
+            if (member is FieldInfo field)
             {
-                case FieldInfo field:
-                    return field.FieldType;
-                case PropertyInfo property:
-                    return  property.PropertyType;
-                default:
-                    throw new MemberAccessException($"Can't write to {member.DeclaringType.Name}.{member.Name} whilst decorated with a {nameof(ByAttribute)}");
+                type = field.FieldType;
+                result = true;
             }
+
+            if (member is PropertyInfo property)
+            {
+                type = property.PropertyType;
+                result = property.CanWrite;
+            }
+
+            return result;
         }
     }
 }

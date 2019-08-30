@@ -117,6 +117,7 @@ namespace Selenium.Community.PageObjects.Tests
         }
 
         [Theory]
+        [AutoDomainData(typeof(IEnumerable<int>))]
         [AutoDomainData(typeof(ICollection<WrapsElement>))]
         [AutoDomainData(typeof(IList<WrapsElement>))]
         [AutoDomainData(typeof(IReadOnlyCollection<WrapsElement>))]

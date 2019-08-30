@@ -13,7 +13,36 @@ namespace Selenium.Community.PageObjects.Tests
     {
         [Theory]
         [AutoDomainData]
-        public void PageObjectFactory_DoesNotDecorateUndecoratedMembers([Frozen] Mock<IPageObjectMemberDecorator> memberDecoratorMock,
+        public void Ctor_ArgumentNullExceptions(IElementLocator elementLocator, IPageObjectMemberDecorator pageObjectMemberDecorator)
+        {
+            new Action(() => new PageObjectFactory(elementLocator, null)).Should()
+                .Throw<ArgumentException>();
+
+            new Action(() => new PageObjectFactory(null, pageObjectMemberDecorator)).Should()
+                .Throw<ArgumentException>();
+        }
+
+        [Theory]
+        [AutoDomainData]
+        public void InitElements_ArgumentNullException(PageObjectFactory pageObjectFactory)
+        {
+            new Action(() => pageObjectFactory.InitElements(null)).Should()
+                .Throw<ArgumentException>();
+        }
+
+        [Theory]
+        [AutoDomainData]
+        public void InitElements_Indexer(PageObjectWithDecoratedIndexer pageObjectWithDecoratedIndexer,
+            PageObjectFactory pageObjectFactory)
+        {
+            new Action(() => pageObjectFactory.InitElements(pageObjectWithDecoratedIndexer)).Should()
+                .Throw<Exception>();
+
+        }
+
+        [Theory]
+        [AutoDomainData]
+        public void InitElements_DoesNotDecorateUndecoratedMembers([Frozen] Mock<IPageObjectMemberDecorator> memberDecoratorMock,
             PageObjectFactory pageObjectFactory)
         {
             pageObjectFactory.InitElements(new PageObjectWithUndecoratedMembers());
@@ -25,7 +54,7 @@ namespace Selenium.Community.PageObjects.Tests
 
         [Theory]
         [AutoDomainData]
-        public void PageObjectFactory_DecoratesFields([Frozen] Mock<IPageObjectMemberDecorator> memberDecoratorMock,
+        public void InitElements_DecoratesFields([Frozen] Mock<IPageObjectMemberDecorator> memberDecoratorMock,
             PageObjectFactory pageObjectFactory,
             PageObjectWithFields pageObject,
             int value)
@@ -50,7 +79,7 @@ namespace Selenium.Community.PageObjects.Tests
        
         [Theory]
         [AutoDomainData]
-        public void PageObjectFactory_DecoratesProperties([Frozen] Mock<IPageObjectMemberDecorator> memberDecoratorMock,
+        public void InitElements_DecoratesProperties([Frozen] Mock<IPageObjectMemberDecorator> memberDecoratorMock,
             PageObjectFactory pageObjectFactory,
             PageObjectWithProperties pageObject,
             int value)
@@ -75,7 +104,7 @@ namespace Selenium.Community.PageObjects.Tests
 
         [Theory]
         [AutoDomainData]
-        public void PageObjectFactory_DecoratesReadonlyFields([Frozen] Mock<IPageObjectMemberDecorator> memberDecoratorMock,
+        public void InitElements_DecoratesReadonlyFields([Frozen] Mock<IPageObjectMemberDecorator> memberDecoratorMock,
             PageObjectFactory pageObjectFactory,
             PageObjectWithReadonlyFields pageObject,
             int value)
@@ -192,6 +221,12 @@ namespace Selenium.Community.PageObjects.Tests
         {
             return InternalField;
         }
+    }
+
+    public class PageObjectWithDecoratedIndexer
+    {
+        [FindsBy(How.ClassName, "a")]
+        public int this[int i] => 0;
     }
 
 }
