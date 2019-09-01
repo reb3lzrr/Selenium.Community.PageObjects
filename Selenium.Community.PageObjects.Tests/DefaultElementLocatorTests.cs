@@ -21,7 +21,7 @@ namespace Selenium.Community.PageObjects.Tests
 
         [Theory]
         [AutoDomainData]
-        public void Ctor_ArgumentNullExcptions()
+        public void Ctor_ArgumentNullExceptions()
         {
             new Action(() => new DefaultElementLocator(null)).Should()
                 .Throw<ArgumentNullException>();
@@ -29,7 +29,7 @@ namespace Selenium.Community.PageObjects.Tests
 
         [Theory]
         [AutoDomainData]
-        public void LocateElement_ArgumentNullExcptions(DefaultElementLocator sut)
+        public void LocateElement_ArgumentNullExceptions(DefaultElementLocator sut)
         {
             new Action(() => sut.LocateElement(null)).Should().Throw<ArgumentNullException>();
         }
@@ -83,7 +83,7 @@ namespace Selenium.Community.PageObjects.Tests
 
         [Theory]
         [AutoDomainData]
-        public void LocateElements_ArgumentNullExcptions(DefaultElementLocator sut)
+        public void LocateElements_ArgumentNullExceptions(DefaultElementLocator sut)
         {
             new Action(() => sut.LocateElements(null)).Should().Throw<ArgumentNullException>();
         }

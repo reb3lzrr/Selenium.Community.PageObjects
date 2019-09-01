@@ -22,7 +22,7 @@ namespace Selenium.Community.PageObjects
         /// to locate elements.</param>
         public DefaultElementLocator(ISearchContext searchContext)
         {
-            _searchContext = searchContext ?? throw new ArgumentException("The SearchContext of the locator object cannot be null", nameof(searchContext));
+            _searchContext = searchContext ?? throw new ArgumentNullException(nameof(searchContext));
             _waiter = new DefaultWait<ISearchContext>(searchContext)
             {
                 PollingInterval = TimeSpan.FromMilliseconds(5),

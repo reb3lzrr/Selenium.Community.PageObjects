@@ -34,8 +34,8 @@ namespace Selenium.Community.PageObjects
         /// <param name="pageObjectMemberDecorator">The MemberDecorator to use once members are found</param>
         public PageObjectFactory(IElementLocator elementLocator, IPageObjectMemberDecorator pageObjectMemberDecorator)
         {
-            _elementLocator = elementLocator ?? throw new ArgumentException("Argument can not be null", nameof(elementLocator));
-            _pageObjectMemberDecorator = pageObjectMemberDecorator ?? throw new ArgumentException("Argument can not be null", nameof(pageObjectMemberDecorator));
+            _elementLocator = elementLocator ?? throw new ArgumentNullException(nameof(elementLocator));
+            _pageObjectMemberDecorator = pageObjectMemberDecorator ?? throw new ArgumentNullException(nameof(pageObjectMemberDecorator));
         }
 
         /// <summary>

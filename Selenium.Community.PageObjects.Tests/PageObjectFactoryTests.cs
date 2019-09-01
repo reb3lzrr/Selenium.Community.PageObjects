@@ -16,10 +16,10 @@ namespace Selenium.Community.PageObjects.Tests
         public void Ctor_ArgumentNullExceptions(IElementLocator elementLocator, IPageObjectMemberDecorator pageObjectMemberDecorator)
         {
             new Action(() => new PageObjectFactory(elementLocator, null)).Should()
-                .Throw<ArgumentException>();
+                .Throw<ArgumentNullException>();
 
             new Action(() => new PageObjectFactory(null, pageObjectMemberDecorator)).Should()
-                .Throw<ArgumentException>();
+                .Throw<ArgumentNullException>();
         }
 
         [Theory]
