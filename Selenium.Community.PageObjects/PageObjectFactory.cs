@@ -47,7 +47,7 @@ namespace Selenium.Community.PageObjects
         {
             if (page == null)
             {
-                throw new ArgumentNullException(nameof(page), "page cannot be null");
+                throw new ArgumentNullException(nameof(page));
             }
 
             InitElements(page, _elementLocator);

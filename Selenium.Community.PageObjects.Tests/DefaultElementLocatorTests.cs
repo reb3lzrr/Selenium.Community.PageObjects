@@ -19,8 +19,7 @@ namespace Selenium.Community.PageObjects.Tests
             By.ClassName("b")
         };
 
-        [Theory]
-        [AutoDomainData]
+        [Test]
         public void Ctor_ArgumentNullExceptions()
         {
             new Action(() => new DefaultElementLocator(null)).Should()

@@ -27,7 +27,7 @@ namespace Selenium.Community.PageObjects.Tests
         public void InitElements_ArgumentNullException(PageObjectFactory pageObjectFactory)
         {
             new Action(() => pageObjectFactory.InitElements(null)).Should()
-                .Throw<ArgumentException>();
+                .Throw<ArgumentNullException>();
         }
 
         [Theory]
