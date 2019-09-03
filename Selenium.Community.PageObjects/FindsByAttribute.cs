@@ -87,39 +87,5 @@ namespace Selenium.Community.PageObjects
                     throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Did not know how to construct How from how {0}, using {1}", _how, _using));
             }
         }
-  
-        /// <summary>
-        /// Determines whether the specified <see cref="object">Object</see> is equal
-        /// to the current <see cref="object">Object</see>.
-        /// </summary>
-        /// <param name="obj">The <see cref="object">Object</see> to compare with the
-        /// current <see cref="object">Object</see>.</param>
-        /// <returns><see langword="true"/> if the specified <see cref="object">Object</see>
-        /// is equal to the current <see cref="object">Object</see>; otherwise,
-        /// <see langword="false"/>.</returns>
-        public override bool Equals(object obj)
-        {
-            var other = obj as FindsByAttribute;
-            if (other == null)
-            {
-                return false;
-            }
-
-            if (other.ByFinder() != ByFinder())
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Serves as a hash function for a particular type.
-        /// </summary>
-        /// <returns>A hash code for the current <see cref="object">Object</see>.</returns>
-        public override int GetHashCode()
-        {
-            return ByFinder().GetHashCode();
-        }
     }
 }
