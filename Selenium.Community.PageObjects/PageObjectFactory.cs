@@ -20,7 +20,7 @@ namespace Selenium.Community.PageObjects
         /// <summary>
         /// Initializes a new instance of the <see cref="PageObjectFactory"/> class.
         /// </summary>
-        /// <param name="webDriver"></param>
+        /// <param name="webDriver">The WebDriver used to communicate with</param>
         public PageObjectFactory(IWebDriver webDriver)
         {
             _elementLocator = new DefaultElementLocator(webDriver);
@@ -32,6 +32,7 @@ namespace Selenium.Community.PageObjects
         /// </summary>
         /// <param name="elementLocator">The locator used to locate members</param>
         /// <param name="pageObjectMemberDecorator">The MemberDecorator to use once members are found</param>
+        /// <exception cref="ArgumentNullException">Thrown when either ElementLocator or PageObjectMemberDecorator are null</exception>
         public PageObjectFactory(IElementLocator elementLocator, IPageObjectMemberDecorator pageObjectMemberDecorator)
         {
             _elementLocator = elementLocator ?? throw new ArgumentNullException(nameof(elementLocator));
@@ -43,6 +44,7 @@ namespace Selenium.Community.PageObjects
         /// of the <param name="page">pageObject</param>.
         /// </summary>
         /// <param name="page">The pageObject</param>
+        /// <exception cref="System.ArgumentNullException">Thrown when passed page is</exception>
         public void InitElements(object page)
         {
             if (page == null)

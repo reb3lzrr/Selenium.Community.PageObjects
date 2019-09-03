@@ -20,6 +20,7 @@ namespace Selenium.Community.PageObjects
         /// </summary>
         /// <param name="searchContext">The <see cref="ISearchContext"/> used by this locator
         /// to locate elements.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="searchContext"/> is null</exception>
         public DefaultElementLocator(ISearchContext searchContext)
         {
             _searchContext = searchContext ?? throw new ArgumentNullException(nameof(searchContext));
@@ -35,11 +36,13 @@ namespace Selenium.Community.PageObjects
         /// </summary>
         /// <param name="bys">The list of methods by which to search for the element.</param>
         /// <returns>An <see cref="IWebElement"/> which is the first match under the desired criteria.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="bys"/>bys is null</exception>
+        /// <exception cref="NoSuchElementException">Thrown when no element could be found within the configured Timeout</exception>
         public IWebElement LocateElement(IEnumerable<By> bys)
         {
             if (!(bys?.Any() ?? false))
             {
-                throw new ArgumentNullException(nameof(bys), "List of criteria may not be null or empty");
+                throw new ArgumentNullException(nameof(bys));
             }
 
             try
@@ -57,11 +60,12 @@ namespace Selenium.Community.PageObjects
         /// </summary>
         /// <param name="bys">The list of methods by which to search for the elements.</param>
         /// <returns>A list of all elements which match the desired criteria.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="bys"/>bys is null</exception>
         public IReadOnlyCollection<IWebElement> LocateElements(IEnumerable<By> bys)
         {
             if (!(bys?.Any() ?? false))
             {
-                throw new ArgumentNullException(nameof(bys), "List of criteria may not be null or empty");
+                throw new ArgumentNullException(nameof(bys));
             }
 
             return FindElements(bys.Distinct(), _searchContext).ToArray();
