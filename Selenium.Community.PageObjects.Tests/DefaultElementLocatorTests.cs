@@ -19,6 +19,21 @@ namespace Selenium.Community.PageObjects.Tests
             By.ClassName("b")
         };
 
+        [Test]
+        public void Ctor_ArgumentNullExceptions()
+        {
+            new Action(() => new DefaultElementLocator(null)).Should()
+                .Throw<ArgumentNullException>();
+        }
+
+        [Theory]
+        [AutoDomainData]
+        public void LocateElement_ArgumentNullExceptions(DefaultElementLocator sut)
+        {
+            new Action(() => sut.LocateElement(null)).Should().Throw<ArgumentNullException>();
+        }
+
+
         [Theory]
         [AutoDomainData]
         public void LocateElement_CallsSearchContext([Frozen] Mock<ISearchContext> searchContextMock,
@@ -65,6 +80,12 @@ namespace Selenium.Community.PageObjects.Tests
             action.Should().Throw<NoSuchElementException>();
         }
 
+        [Theory]
+        [AutoDomainData]
+        public void LocateElements_ArgumentNullExceptions(DefaultElementLocator sut)
+        {
+            new Action(() => sut.LocateElements(null)).Should().Throw<ArgumentNullException>();
+        }
 
         [Theory]
         [AutoDomainData]

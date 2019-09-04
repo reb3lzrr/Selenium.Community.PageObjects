@@ -6,7 +6,7 @@ using AutoFixture.NUnit3;
 
 namespace Selenium.Community.PageObjects.Tests.Autofixture
 {
-    internal class AutoDomainDataAttribute : AutoDataAttribute
+    internal class AutoDomainDataAttribute : InlineAutoDataAttribute
     {
         public static Func<IFixture> fixtureFactory = () =>
         {
@@ -17,7 +17,7 @@ namespace Selenium.Community.PageObjects.Tests.Autofixture
             return fixture;
         };
 
-        public AutoDomainDataAttribute() : base(fixtureFactory)
+        public AutoDomainDataAttribute(params object[] parameters) : base(fixtureFactory, parameters)
         {
 
         }

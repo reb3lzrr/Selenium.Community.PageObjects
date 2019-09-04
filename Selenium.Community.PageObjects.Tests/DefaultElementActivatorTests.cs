@@ -8,20 +8,32 @@ namespace Selenium.Community.PageObjects.Tests
 {
     public class DefaultElementActivatorTests
     {
-
-        [Theory]
-        [AutoDomainData]
-        public void DefaultElementActivator_Create_Throws(DefaultElementActivator defaultElementActivator)
+        [Test]
+        public void DefaultElementActivator_Create_Throws()
         {
-            var action = new Action(() => defaultElementActivator.Create<ClassWithMultipleConstructors>());
+            var sut = new DefaultElementActivator();
+            var action = new Action(() => sut.Create<ClassWithMultipleConstructors>());
 
-            action.Should().Throw<ActivationException>().WithMessage($"Unable to activate type {typeof(ClassWithMultipleConstructors)}. No matching constructor was found with provided parameters {string.Join(", ", new object[0].Select(x => x.GetType().ToString()))}");
+            action.Should()
+                .Throw<ActivationException>()
+                .WithMessage("Cannot resolve parameter 'Selenium.Community.PageObjects.Tests.DefaultElementActivatorTests+Class1 class1' of constructor 'Void .ctor(Selenium.Community.PageObjects.Tests.DefaultElementActivatorTests+Class1)'.");
         }
 
         [Theory]
         [AutoDomainData]
-        public void DefaultElementActivator_Create(DefaultElementActivator defaultElementActivator, Class1 class1)
+        public void DefaultElementActivator_Create_ViaContstructorParameters(Class1 class1)
         {
+            var defaultElementActivator = new DefaultElementActivator(class1);
+            var instance = defaultElementActivator.Create<ClassWithMultipleConstructors>();
+
+            instance.Class1.Should().Be(class1);
+        }
+
+        [Theory]
+        [AutoDomainData]
+        public void DefaultElementActivator_Create_ViaParameters(Class1 class1)
+        {
+            var defaultElementActivator = new DefaultElementActivator();
             var instance = defaultElementActivator.Create<ClassWithMultipleConstructors>(class1);
 
             instance.Class1.Should().Be(class1);
@@ -29,9 +41,18 @@ namespace Selenium.Community.PageObjects.Tests
 
         [Theory]
         [AutoDomainData]
-        public void DefaultElementActivator_Create_IsGreedy(DefaultElementActivator defaultElementActivator, Class1 class1, Class2 class2)
+        public void DefaultElementActivator_Create_NoConstructor()
         {
-            var instance = defaultElementActivator.Create<ClassWithMultipleConstructors>(class1, class2);
+            var defaultElementActivator = new DefaultElementActivator();
+            new Action(() => defaultElementActivator.Create<Class1>()).Should().NotThrow();
+        }
+
+        [Theory]
+        [AutoDomainData]
+        public void DefaultElementActivator_Create_IsGreedy(Class1 class1, Class2 class2)
+        {
+            var sut = new DefaultElementActivator();
+            var instance = sut.Create<ClassWithMultipleConstructors>(class1, class2);
 
             instance.Class1.Should().Be(class1);
             instance.Interface1.Should().Be(class1);
@@ -40,16 +61,30 @@ namespace Selenium.Community.PageObjects.Tests
 
         [Theory]
         [AutoDomainData]
-        public void DefaultElementActivator_Create_MatchesFirstParameter(DefaultElementActivator defaultElementActivator, Class1 class1, Class2 class2)
+        public void DefaultElementActivator_Create_MatchesFirstParameter(Class1 class1, Class2 class2)
         {
-            var instance = defaultElementActivator.Create<ClassWithMultipleConstructors>(class2, class1);
+            var sut = new DefaultElementActivator();
+            var instance = sut.Create<ClassWithMultipleConstructors>(class2, class1);
 
             instance.Class1.Should().Be(class1);
             instance.Interface1.Should().Be(class2);
             instance.Interface2.Should().Be(class2);
         }
 
-        private class ClassWithMultipleConstructors
+
+        [Theory]
+        [AutoDomainData]
+        public void DefaultElementActivator_Create_MatchesFirstParameter_ViaConstructorParameter(Class1 class1, Class2 class2)
+        {
+            var sut = new DefaultElementActivator(class1);
+            var instance = sut.Create<ClassWithMultipleConstructors>(class2);
+
+            instance.Class1.Should().Be(class1);
+            instance.Interface1.Should().Be(class2);
+            instance.Interface2.Should().Be(class2);
+        }
+
+        public class ClassWithMultipleConstructors
         {
             public Class1 Class1 { get; }
             public IInterface1 Interface1 { get; }

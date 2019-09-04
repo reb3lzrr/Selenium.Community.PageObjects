@@ -17,16 +17,26 @@ namespace Selenium.Community.PageObjects
         private const BindingFlags PublicBindingOptions = BindingFlags.Instance | BindingFlags.Public;
         private const BindingFlags NonPublicBindingOptions = BindingFlags.Instance | BindingFlags.NonPublic;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PageObjectFactory"/> class.
+        /// </summary>
+        /// <param name="webDriver">The WebDriver used to communicate with</param>
         public PageObjectFactory(IWebDriver webDriver)
         {
             _elementLocator = new DefaultElementLocator(webDriver);
-            _pageObjectMemberDecorator = new ProxyPageObjectMemberDecorator(new DefaultElementActivator(), this, webDriver);
+            _pageObjectMemberDecorator = new ProxyPageObjectMemberDecorator(new DefaultElementActivator(webDriver), this);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PageObjectFactory"/> class.
+        /// </summary>
+        /// <param name="elementLocator">The locator used to locate members</param>
+        /// <param name="pageObjectMemberDecorator">The MemberDecorator to use once members are found</param>
+        /// <exception cref="ArgumentNullException">Thrown when either ElementLocator or PageObjectMemberDecorator are null</exception>
         public PageObjectFactory(IElementLocator elementLocator, IPageObjectMemberDecorator pageObjectMemberDecorator)
         {
-            _elementLocator = elementLocator ?? throw new ArgumentException("Argument can not be null", nameof(elementLocator));
-            _pageObjectMemberDecorator = pageObjectMemberDecorator;
+            _elementLocator = elementLocator ?? throw new ArgumentNullException(nameof(elementLocator));
+            _pageObjectMemberDecorator = pageObjectMemberDecorator ?? throw new ArgumentNullException(nameof(pageObjectMemberDecorator));
         }
 
         /// <summary>
@@ -34,11 +44,12 @@ namespace Selenium.Community.PageObjects
         /// of the <param name="page">pageObject</param>.
         /// </summary>
         /// <param name="page">The pageObject</param>
+        /// <exception cref="System.ArgumentNullException">Thrown when passed page is</exception>
         public void InitElements(object page)
         {
             if (page == null)
             {
-                throw new ArgumentNullException(nameof(page), "page cannot be null");
+                throw new ArgumentNullException(nameof(page));
             }
 
             InitElements(page, _elementLocator);
@@ -51,30 +62,33 @@ namespace Selenium.Community.PageObjects
                 var bys = member.GetCustomAttributes()
                     .Select(x => (x as ByAttribute)?.ByFinder())
                     .Where(x => x != null)
+                    .Distinct()
                     .ToArray();
 
                 if (bys.Any())
                 {
-                    //Check if member can be written to
-                    if (!CanWriteToMember(member, out var typeToDecorate))
-                    {
-                        throw new MemberAccessException($"Can't write to {member.DeclaringType.Name}.{member.Name} whilst decorated with a {nameof(ByAttribute)}");
-                    }
-
                     //Decorates the member
-                    var decoratedValue = _pageObjectMemberDecorator.Decorate(typeToDecorate, bys, locator);
-                    if (decoratedValue != null)
+                    if (CanWriteToMember(member, out var typeToDecorate))
                     {
-                        var field = member as FieldInfo;
-                        var property = member as PropertyInfo;
-                        if (field != null)
+                        var decoratedValue = _pageObjectMemberDecorator.Decorate(typeToDecorate, bys, locator);
+                        if (decoratedValue != null)
                         {
-                            field.SetValue(page, decoratedValue);
+                            var field = member as FieldInfo;
+                            var property = member as PropertyInfo;
+                            if (field != null)
+                            {
+                                field.SetValue(page, decoratedValue);
+                            }
+                            else if (property != null)
+                            {
+                                property.SetValue(page, decoratedValue, null);
+                            }
                         }
-                        else if (property != null)
-                        {
-                            property.SetValue(page, decoratedValue, null);
-                        }
+                    }
+                    else
+                    {
+                        //TODO: Exception
+                        throw new Exception("Can't write to member");
                     }
                 }
             }
@@ -98,20 +112,22 @@ namespace Selenium.Community.PageObjects
 
         private static bool CanWriteToMember(MemberInfo member, out Type type)
         {
+            type = null;
+            var result = false;
+
             if (member is FieldInfo field)
             {
                 type = field.FieldType;
-                return true;
+                result = true;
             }
 
             if (member is PropertyInfo property)
             {
                 type = property.PropertyType;
-                return property.CanWrite;
+                result = property.CanWrite;
             }
 
-            type = null;
-            return false;
+            return result;
         }
     }
 }
