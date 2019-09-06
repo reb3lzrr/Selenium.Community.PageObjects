@@ -54,8 +54,7 @@ namespace Selenium.Community.PageObjects
                 }
             }
 
-            //TODO: find or make exception
-            throw new Exception($"Can't decorate {typeToDecorate}");
+            throw new DecorationException($"Unable to decorate {typeToDecorate.Name}, it is unsupported");
         }
 
         public IEnumerable<T> DecorateEnumerableWrappedElement<T>(IElementLocator elementLocator, IEnumerable<By> bys)

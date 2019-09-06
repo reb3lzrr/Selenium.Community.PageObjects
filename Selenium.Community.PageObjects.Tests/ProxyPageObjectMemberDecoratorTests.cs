@@ -66,12 +66,12 @@ namespace Selenium.Community.PageObjects.Tests
             Type type,
             IEnumerable<By> bys,
             IElementLocator elementLocator,
-            [Frozen] Mock<IWebDriver> webDriverMock,
-            [Frozen] WrapsElement wrapsElement,
-            [Frozen] Mock<IElementActivator> elementActivatorMock,
             ProxyPageObjectMemberDecorator sut)
         {
-            new Action(() => sut.Decorate(type, bys, elementLocator)).Should().Throw<Exception>();
+            new Action(() => sut.Decorate(type, bys, elementLocator))
+                .Should()
+                .Throw<DecorationException>()
+                .WithMessage($"Unable to decorate {type.Name}, it is unsupported");
         }
 
         [Theory]
@@ -135,7 +135,9 @@ namespace Selenium.Community.PageObjects.Tests
                 .Setup(x => x.Create(type, It.IsAny<object[]>()))
                 .Returns(wrapsElement);
 
-            new Action(() => sut.Decorate(type, bys, elementLocator)).Should().Throw<Exception>();
+            new Action(() => sut.Decorate(type, bys, elementLocator)).Should()
+                .Throw<DecorationException>()
+                .WithMessage($"Unable to decorate {type.Name}, it is unsupported");
         }
     }
 }
