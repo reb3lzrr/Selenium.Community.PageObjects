@@ -26,7 +26,7 @@ deploy:
     branch: master
   server:                     
   api_key:
-  secure: gU55bWD2Ech9rRqMtBDzGEppTTNUvRwW1H3rP1XucIlxmOEkEqajwqNUE39HfEz6
+    secure: fJFLKVGeErCKif3KJLKoAzH2kKgfl3lJxNUVrRJzAsUo3yMkLUTdRuvWTSnRSLPQ
   skip_symbols: false
   symbol_server:           
   artifact: /.*\.nupkg/
