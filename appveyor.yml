@@ -1,15 +1,14 @@
--
-  branches:
-    only:
-      - master
-    deploy:
-      provider: NuGet
-      server:                 
-      api_key:
-        secure: gU55bWD2Ech9rRqMtBDzGEppTTNUvRwW1H3rP1XucIlxmOEkEqajwqNUE39HfEz6
-      skip_symbols: false
-      symbol_server:           
-      artifact: /.*\.nupkg/
+branches:
+  only:
+    - master
+  deploy:
+    provider: NuGet
+    server:                     
+    api_key:
+    secure: gU55bWD2Ech9rRqMtBDzGEppTTNUvRwW1H3rP1XucIlxmOEkEqajwqNUE39HfEz6
+    skip_symbols: false
+    symbol_server:           
+    artifact: /.*\.nupkg/
 
 
 version: 0.1.{build}-alpha
