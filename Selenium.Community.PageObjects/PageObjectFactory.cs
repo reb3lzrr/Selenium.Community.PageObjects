@@ -87,8 +87,7 @@ namespace Selenium.Community.PageObjects
                     }
                     else
                     {
-                        //TODO: Exception
-                        throw new Exception("Can't write to member");
+                        throw new DecorationException($"Unable to decorate {member.DeclaringType?.Name}.{member.Name}, it cannot be written to");
                     }
                 }
             }

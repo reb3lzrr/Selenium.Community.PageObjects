@@ -36,7 +36,8 @@ namespace Selenium.Community.PageObjects.Tests
             PageObjectFactory pageObjectFactory)
         {
             new Action(() => pageObjectFactory.InitElements(pageObjectWithDecoratedIndexer)).Should()
-                .Throw<Exception>();
+                .Throw<DecorationException>()
+                .WithMessage($"Unable to decorate {pageObjectWithDecoratedIndexer.GetType().Name}.Item, it cannot be written to");
 
         }
 
