@@ -2,8 +2,16 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <AssemblyName>Selenium.Community.PageObjects</AssemblyName>
+    <Version>0.1.0-alpha</Version>
+    <Description>PageObjects powered by  the community, inspired by the DotNetSeleniumExtras.PageObjects package</Description>
+    <Authors>Koen Klever</Authors>
+    <Product>Selenium Community PageObjects</Product>
+    <PackageProjectUrl>https://github.com/reb3lzrr/Selenium.Community.PageObjects</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/reb3lzrr/Selenium.Community.PageObjects</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>Selenium, PageObjects</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
