@@ -1,16 +1,3 @@
-branches:
-  only:
-    - master
-  deploy:
-    provider: NuGet
-    server:                     
-    api_key:
-    secure: gU55bWD2Ech9rRqMtBDzGEppTTNUvRwW1H3rP1XucIlxmOEkEqajwqNUE39HfEz6
-    skip_symbols: false
-    symbol_server:           
-    artifact: /.*\.nupkg/
-
-
 version: 0.1.{build}-alpha
 
 configuration: Release
@@ -25,7 +12,6 @@ nuget:
 
 environment:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-  NUGET_XMLDOC_MODE: skip
 
 build:
   publish_nuget: true 
@@ -33,3 +19,14 @@ build:
 skip_tags: true
 
 clone_depth: 1
+
+deploy:
+  provider: NuGet
+  on:
+    branch: master
+  server:                     
+  api_key:
+  secure: gU55bWD2Ech9rRqMtBDzGEppTTNUvRwW1H3rP1XucIlxmOEkEqajwqNUE39HfEz6
+  skip_symbols: false
+  symbol_server:           
+  artifact: /.*\.nupkg/
