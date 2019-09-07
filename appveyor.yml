@@ -1,4 +1,4 @@
-version: 0.1.{build}-alpha #This version is leading
+version: 0.1.{build} #This version is leading
 
 configuration: Release
 
@@ -23,8 +23,8 @@ clone_depth: 1
 dotnet_csproj:
   patch: true
   file: '**\Selenium.Community.PageObjects.csproj'
-  version: '{version}'
-  package_version: '{version}'
+  version: '{version}-alpha'
+  package_version: '{version}-alpha'
   assembly_version: '{version}'
   file_version: '{build}'
   informational_version: '{version}'
