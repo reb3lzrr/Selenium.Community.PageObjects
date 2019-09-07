@@ -1,4 +1,4 @@
-version: 0.1.{build}-alpha
+version: 0.1.{build} #This version is leading
 
 configuration: Release
 
@@ -19,6 +19,15 @@ build:
 skip_tags: true
 
 clone_depth: 1
+
+dotnet_csproj:
+  patch: true
+  file: '**\Selenium.Community.PageObjects.csproj'
+  version: '{version}-alpha'
+  package_version: '{version}-alpha'
+  assembly_version: '{version}'
+  file_version: '{build}'
+  informational_version: '{version}'
 
 deploy:
   provider: NuGet
