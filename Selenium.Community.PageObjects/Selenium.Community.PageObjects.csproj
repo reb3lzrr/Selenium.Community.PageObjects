@@ -12,10 +12,7 @@
     <RepositoryUrl>https://github.com/reb3lzrr/Selenium.Community.PageObjects</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Selenium, PageObjects</PackageTags>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
-    <DocumentationFile>bin\Release\Selenium.Community.PageObjects.xml</DocumentationFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

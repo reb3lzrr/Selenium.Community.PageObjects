@@ -26,6 +26,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="bin\Release\Selenium.Community.PageObjects.xml" />
+    <file src="bin\Release\Selenium.Community.PageObjects.xml" target="lib\netstandard2.0\" />
+    <file src="bin\Release\Selenium.Community.PageObjects.xml" target="lib\net46\" />
   </files>
 </package>
