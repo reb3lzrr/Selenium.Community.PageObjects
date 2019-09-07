@@ -1,4 +1,4 @@
-version: 0.1.1-alpha #This version is leading
+version: 0.1.{build}-alpha #This version is leading
 
 configuration: Release
 
