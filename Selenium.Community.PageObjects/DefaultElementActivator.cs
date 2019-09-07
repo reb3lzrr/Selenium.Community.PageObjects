@@ -10,11 +10,16 @@ namespace Selenium.Community.PageObjects
     {
         private readonly object[] _additionalParameters;
 
+        /// <summary>
+        /// Creates a new instance of DefaultElementActivator
+        /// </summary>
+        /// <param name="additionalParameters"></param>
         public DefaultElementActivator(params object[] additionalParameters)
         {
             _additionalParameters = additionalParameters;
         }
 
+        /// <inheritdoc />
         public object Create(Type type, params object[] parameters)
         {
             parameters = parameters.Concat(_additionalParameters).ToArray();
@@ -40,11 +45,11 @@ namespace Selenium.Community.PageObjects
                 })
                 .ToArray();
 
-            var invokaleConstructorInfo = constructors
+            var invokableConstructorInfo = constructors
                 .OrderByDescending(x => x.constructorParameters.Length)
                 .FirstOrDefault(x => x.matchedParameters.Count() == x.constructorParameters.Length);
 
-            if (invokaleConstructorInfo == null)
+            if (invokableConstructorInfo == null)
             {
                 var bestMatchConstructor = constructors
                     .OrderBy(x => x.constructorParameters.Length)
@@ -54,9 +59,10 @@ namespace Selenium.Community.PageObjects
                 throw new ActivationException($"Cannot resolve parameter '{unresolvedParameter.ParameterType} {unresolvedParameter.Name}' of constructor 'Void .ctor({string.Join(", ", bestMatchConstructor.constructorParameters.Select(x => x.ParameterType))})'.");
             }
 
-            return invokaleConstructorInfo.constructor.Invoke(invokaleConstructorInfo.matchedParameters);
+            return invokableConstructorInfo.constructor.Invoke(invokableConstructorInfo.matchedParameters);
         }
 
+        /// <inheritdoc />
         public T Create<T>(params object[] parameters)
         {
             return (T)Create(typeof(T), parameters);

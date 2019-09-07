@@ -3,7 +3,7 @@
 <package>
   <metadata>
     <id>Selenium.Community.PageObjects</id>
-    <version>0.1.0-alpha</version>
+    <version>0.1.1-alpha</version>
     <title>Selenium Community PageObjects</title>
     <authors></authors>
     <owners>Koen Klever</owners>
@@ -25,4 +25,7 @@
       </group>
     </dependencies>
   </metadata>
+  <files>
+    <file src="bin\Release\Selenium.Community.PageObjects.xml" />
+  </files>
 </package>
