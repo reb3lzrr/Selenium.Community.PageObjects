@@ -8,17 +8,26 @@ using Selenium.Community.PageObjects.Proxies;
 
 namespace Selenium.Community.PageObjects
 {
+    /// <summary>
+    /// A PageObject Member decorator which applies proxies, this allows for lazy-access to the members
+    /// </summary>
     public class ProxyPageObjectMemberDecorator : IPageObjectMemberDecorator
     {
         private readonly IElementActivator _elementActivator;
         private readonly PageObjectFactory _factory;
 
+        /// <summary>
+        /// Creates a new instance of <see cref="ProxyPageObjectMemberDecorator"/>
+        /// </summary>
+        /// <param name="elementActivator">The ElementActivator to use once proxied</param>
+        /// <param name="factory">The PageObjectFactory to use for nested page objects</param>
         public ProxyPageObjectMemberDecorator(IElementActivator elementActivator, PageObjectFactory factory)
         {
             _elementActivator = elementActivator;
             _factory = factory;
         }
 
+        /// <inheritdoc />
         public object Decorate(Type typeToDecorate, IEnumerable<By> bys, IElementLocator elementLocator)
         {
             if (typeof(IWebElement).IsAssignableFrom(typeToDecorate))
@@ -81,7 +90,7 @@ namespace Selenium.Community.PageObjects
             var wrappedElementProperty = wrappedElement.GetType()
                 .GetMember(nameof(IWrapsElement.WrappedElement))
                 .Single() as PropertyInfo;
-            
+
             if (wrappedElementProperty.CanWrite)
             {
                 wrappedElementProperty.SetValue(wrappedElement, element);
