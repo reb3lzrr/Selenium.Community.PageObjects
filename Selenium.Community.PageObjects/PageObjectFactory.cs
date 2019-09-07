@@ -41,7 +41,7 @@ namespace Selenium.Community.PageObjects
 
         /// <summary>
         /// Populates the members decorated with the <see cref="FindsByAttribute"/>
-        /// of the <param name="page">pageObject</param>.
+        /// of the PageObject
         /// </summary>
         /// <param name="page">The pageObject</param>
         /// <exception cref="System.ArgumentNullException">Thrown when passed page is</exception>

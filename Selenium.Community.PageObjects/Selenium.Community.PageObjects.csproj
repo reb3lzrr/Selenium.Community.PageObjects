@@ -12,6 +12,7 @@
     <RepositoryUrl>https://github.com/reb3lzrr/Selenium.Community.PageObjects</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Selenium, PageObjects</PackageTags>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
