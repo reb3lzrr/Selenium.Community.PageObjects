@@ -67,10 +67,11 @@ namespace Selenium.Community.PageObjects.Tests
 
         [Theory]
         [AutoDomainData]
-        public void LocateElement_ThrowsExceptionWhenNothingIsFound(
-            [Frozen] Mock<ISearchContext> searchContextMock,
-            DefaultElementLocator sut)
+        public void LocateElement_ThrowsExceptionWhenNothingIsFound([Frozen] Mock<ISearchContext> searchContextMock)
         {
+            var sut = new DefaultElementLocator(searchContextMock.Object, TimeSpan.FromMilliseconds(5),
+                TimeSpan.FromMilliseconds(20));
+
             searchContextMock.Setup(x => x.FindElements(_bys.First()))
                 .Throws(new NoSuchElementException());
             searchContextMock.Setup(x => x.FindElements(_bys.Last()))

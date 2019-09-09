@@ -47,7 +47,7 @@ namespace Selenium.Community.PageObjects
         private readonly string _using;
 
         /// <summary>
-        /// Creates a new instance of the FindsByAttribute, allowing to 
+        /// Creates a new instance of the FindsByAttribute 
         /// </summary>
         /// <param name="how"></param>
         /// <param name="using"></param>
@@ -57,7 +57,9 @@ namespace Selenium.Community.PageObjects
             _using = @using;
         }
 
-        /// <inheritdoc cref="ByAttribute.ByFinder"/>
+        /// <summary>
+        /// Gets an explicit <see cref="By"/> object used to locate the member with.
+        /// </summary>
         public override By ByFinder()
         {
             return _finder = _finder ?? GetFinder();
