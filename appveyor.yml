@@ -10,6 +10,8 @@ before_build:
 nuget:
   disable_publish_on_pr: true
 
+skip_branch_with_pr: true
+
 environment:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 
