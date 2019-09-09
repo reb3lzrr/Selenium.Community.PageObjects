@@ -4,7 +4,7 @@ using System.Linq;
 namespace Selenium.Community.PageObjects
 {
     /// <summary>
-    /// A default activator used by the <see cref="PageObjectFactory"/>
+    ///The default activator for members of a PageObject. Used by <see cref="PageObjectFactory"/> to activate child-page objects.
     /// </summary>
     public class DefaultElementActivator : IElementActivator
     {
@@ -19,7 +19,13 @@ namespace Selenium.Community.PageObjects
             _additionalParameters = additionalParameters;
         }
 
-        /// <inheritdoc />
+
+        /// <summary>
+        /// Creates an instance of a type, given a set of constructor parameter values
+        /// </summary>
+        /// <param name="type">The type to instantiate</param>
+        /// <param name="parameters">The constructor parameters</param>
+        /// <returns>An instance of type</returns>
         public object Create(Type type, params object[] parameters)
         {
             parameters = parameters.Concat(_additionalParameters).ToArray();
@@ -62,7 +68,11 @@ namespace Selenium.Community.PageObjects
             return invokableConstructorInfo.constructor.Invoke(invokableConstructorInfo.matchedParameters);
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Creates an instance of a type, given a set of constructor parameter values
+        /// </summary>
+        /// <param name="parameters">The constructor parameters</param>
+        /// <returns>An instance of <typeparam name="T">type T</typeparam></returns>
         public T Create<T>(params object[] parameters)
         {
             return (T)Create(typeof(T), parameters);

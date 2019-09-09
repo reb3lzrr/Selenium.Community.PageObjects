@@ -32,6 +32,25 @@ namespace Selenium.Community.PageObjects
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="DefaultElementLocator"/> class.
+        /// </summary>
+        /// <param name="searchContext">The <see cref="ISearchContext"/> used by this locator
+        /// to locate elements.</param>
+        /// <param name="pollingInteval">The re-try interval once an element could not be located</param>
+        /// <param name="timeout">The maximum duration to try to locate an element, after this period a <see cref="NoSuchElementException"/> is thrown</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="searchContext"/> is null</exception>
+        public DefaultElementLocator(ISearchContext searchContext, TimeSpan pollingInteval, TimeSpan timeout)
+        {
+            _searchContext = searchContext ?? throw new ArgumentNullException(nameof(searchContext));
+            _waiter = new DefaultWait<ISearchContext>(searchContext)
+            {
+                PollingInterval = pollingInteval,
+                Timeout = timeout
+            };
+        }
+
+
+        /// <summary>
         /// Locates an element using the given list of <see cref="By"/> criteria.
         /// </summary>
         /// <param name="bys">The list of methods by which to search for the element.</param>

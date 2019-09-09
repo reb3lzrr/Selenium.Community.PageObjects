@@ -3,7 +3,7 @@
 namespace Selenium.Community.PageObjects
 {
     /// <summary>
-    /// An interface describing an activator for members of a PageObject, to use with the <see cref="PageObjectFactory"/>.
+    /// An interface describing an activator for members of a PageObject. Used by <see cref="PageObjectFactory"/> to activate child-page objects.
     /// </summary>
     public interface IElementActivator
     {

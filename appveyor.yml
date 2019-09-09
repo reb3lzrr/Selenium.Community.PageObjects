@@ -29,6 +29,10 @@ dotnet_csproj:
   file_version: '{build}'
   informational_version: '{version}'
 
+skip_commits:
+  files:
+  - README.md
+
 deploy:
   provider: NuGet
   on:
