@@ -1,5 +1,6 @@
 environment:
   nugetversion: 1.0.0 #This version is leading
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 
 version: $(nugetversion).build{build} 
 
@@ -12,9 +13,6 @@ before_build:
 
 nuget:
   disable_publish_on_pr: true
-
-environment:
-  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 
 build:
   publish_nuget: true 
