@@ -1,4 +1,7 @@
-version: 0.3.{build} #This version is leading
+environment:
+  nugetversion: 1.0.0 #This version is leading
+
+version: $(nugetversion).build{build} 
 
 configuration: Release
 
@@ -23,11 +26,11 @@ clone_depth: 1
 dotnet_csproj:
   patch: true
   file: '**\Selenium.Community.PageObjects.csproj'
-  version: '{version}-alpha'
-  package_version: '{version}-alpha'
-  assembly_version: '{version}'
-  file_version: '{build}'
-  informational_version: '{version}'
+  version: '$(nugetversion)'
+  package_version: '$(nugetversion)'
+  assembly_version: '$(nugetversion)'
+  file_version: '$(nugetversion)'
+  informational_version: '$(nugetversion)'
 
 skip_commits:
   files:
