@@ -1,4 +1,4 @@
-version: 0.1.{build} #This version is leading
+version: 0.2.{build} #This version is leading
 
 configuration: Release
 
@@ -28,6 +28,10 @@ dotnet_csproj:
   assembly_version: '{version}'
   file_version: '{build}'
   informational_version: '{version}'
+
+skip_commits:
+  files:
+  - README.md
 
 deploy:
   provider: NuGet
