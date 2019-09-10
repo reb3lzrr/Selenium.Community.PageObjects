@@ -79,6 +79,10 @@ namespace Selenium.Community.PageObjects
                 {
                     return searchContext.FindElements(by).AsEnumerable();
                 }
+                catch (StaleElementReferenceException)
+                {
+                    return new IWebElement[0];
+                }
                 catch (NoSuchElementException)
                 {
                     return new IWebElement[0];

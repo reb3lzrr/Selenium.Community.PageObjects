@@ -1,4 +1,7 @@
+using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Autofac;
 using FluentAssertions;
 using NUnit.Framework;
@@ -52,6 +55,29 @@ namespace Selenium.Community.PageObjects.Tests.IntegrationTests
             testPageObject.PopularProducts.Should().HaveCount(10);
             javaScriptExecutor.ExecuteScript("document.querySelectorAll('#popularProducts div.media:nth-of-type(2n)').forEach(e => e.remove())");
             testPageObject.PopularProducts.Should().HaveCount(6);
+        }
+
+        [Test]
+        public void FindsMultipleItems_WaitUntil()
+        {
+            var testPageObject = SetUpFixture.Container.Resolve<TestPageObject>();
+            var javaScriptExecutor = SetUpFixture.Container.Resolve<IJavaScriptExecutor>();
+
+            testPageObject.Open();
+            testPageObject.PopularProducts.Should().HaveCount(10);
+
+            var removeSomeProductsTask = Task.Run(() =>
+            {
+                Thread.Sleep(1000);
+                javaScriptExecutor.ExecuteScript("document.querySelectorAll('#popularProducts div.media:nth-of-type(2n)').forEach(e => e.remove())");
+            });
+
+            var waitForSixProductsTask = Task.Run(() =>
+            {
+                testPageObject.PopularProducts.WaitUntil(x => x.Count() < 10);
+            });
+
+            Task.WaitAll(new [] { removeSomeProductsTask, waitForSixProductsTask}, TimeSpan.FromSeconds(5));
         }
     }
 }
