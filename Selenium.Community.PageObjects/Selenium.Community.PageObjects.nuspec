@@ -3,7 +3,7 @@
 <package>
   <metadata>
     <id>Selenium.Community.PageObjects</id>
-    <version>0.1.1-alpha</version>
+    <version></version>
     <title>Selenium Community PageObjects</title>
     <authors></authors>
     <owners>Koen Klever</owners>
@@ -11,9 +11,9 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>PageObjects powered by the community, inspired by the DotNetSeleniumExtras.PageObjects package</description>
     <summary>PageObjects powered by  the community, inspired by the DotNetSeleniumExtras.PageObjects package</summary>
-    <releaseNotes>Initial 0.1.0 release</releaseNotes>
+    <releaseNotes></releaseNotes>
     <copyright>Copyright 2019</copyright>
-    <tags>Selenium, PageObjects</tags>
+    <tags>Selenium, PageObjects, WebDriver, Community, Browser, Automation, DotNetCore, Core</tags>
     <dependencies>
       <group targetFramework=".NETFramework4.6" >
         <dependency id="Selenium.WebDriver" version="(3.0.0,)" />
